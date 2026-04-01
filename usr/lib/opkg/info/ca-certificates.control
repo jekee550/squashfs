@@ -1,8 +1,0 @@
-Package: ca-certificates
-Version: 20190110-1
-Depends: libc, libssp
-Source: package/system/ca-certificates
-Section: base
-Architecture: all
-Installed-Size: 132628
-Description:  System CA certificates

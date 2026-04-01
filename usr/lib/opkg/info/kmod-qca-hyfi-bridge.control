@@ -1,9 +1,0 @@
-Package: kmod-qca-hyfi-bridge
-Version: 4.4.60+local0.0.1-1
-Depends: kernel (=4.4.60-1-3ee98c57b1216d17ff25499ba71cfacb), kmod-emesh-sp
-Source: qca/feeds/hyfi/qca-hyfi-bridging/qca-hyfi-bridge
-Section: QCA
-Maintainer: Qualcomm Atheros, Inc.
-Architecture: ipq
-Installed-Size: 58045
-Description:  This package installs the Hy-Fi bridging Netfilter Module

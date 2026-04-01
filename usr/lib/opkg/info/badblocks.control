@@ -1,8 +1,0 @@
-Package: badblocks
-Version: 1.42.12-1
-Depends: libc, libssp, e2fsprogs
-Source: package/utils/e2fsprogs
-Section: utils
-Architecture: ipq
-Installed-Size: 10566
-Description:  Ext2 Filesystem badblocks utility

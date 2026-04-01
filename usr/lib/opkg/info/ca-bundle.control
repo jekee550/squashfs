@@ -1,8 +1,0 @@
-Package: ca-bundle
-Version: 20190110-1
-Depends: libc, libssp
-Source: package/system/ca-certificates
-Section: base
-Architecture: all
-Installed-Size: 115291
-Description:  System CA certificates as a bundle

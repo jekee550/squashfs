@@ -1,9 +1,0 @@
-Package: qca-wlanfw-upgrade
-Version: 1
-Depends: libc, libssp, squashfs4
-Source: qca/feeds/qca-platform-utils/qca-wlanfw-upgrade
-Section: QCA
-Architecture: ipq
-Installed-Size: 1826
-Description:  This package contains a wlan firmware upgrade script which can be used
- internally by QCA to update the wlan firmware components like q6 and m3 images.

@@ -1,8 +1,0 @@
-Package: nm_appfilter
-Version: 1.0-1
-Depends: libc, libssp, libubox, libubus, libuci, libpthread, libjson-c, libblobmsg-json, libopenssl, libjdc_uci, libjdc_utilities, libnm_uci_config, libcurl
-Source: feeds/jdcloud_packages/service/jdc_net_manager/apps/nm_appfilter
-Section: opt
-Architecture: ipq
-Installed-Size: 794901
-Description:  open net manager appfilter app

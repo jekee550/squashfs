@@ -1,9 +1,0 @@
-Package: libmicroxml
-Version: 2015-03-18-caa8d3e6887f5c70e54df555dd78e4e45cfa74cc
-Depends: libc, libssp
-Source: qca/feeds/platform_utils/libmicroxml
-Section: libs
-Maintainer: Luka Perkov <luka@openwrt.org>
-Architecture: ipq
-Installed-Size: 16659
-Description:  A micro sized XML library

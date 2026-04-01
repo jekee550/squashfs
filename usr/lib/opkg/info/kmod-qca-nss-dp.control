@@ -1,8 +1,0 @@
-Package: kmod-qca-nss-dp
-Version: 4.4.60+local0.0.1-1
-Depends: kernel (=4.4.60-1-3ee98c57b1216d17ff25499ba71cfacb), kmod-qca-ssdk-nohnat
-Source: qca/feeds/nss-host/qca-nss-dp
-Section: kernel
-Architecture: ipq
-Installed-Size: 24148
-Description:  Kernel driver for NSS data plane

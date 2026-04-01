@@ -1,8 +1,0 @@
-Package: nm_rule_apply
-Version: 1.0-1
-Depends: libc, libssp, libuci, libjson-c, libblobmsg-json, libubox, libubus, libnm_uci_config, libjdc_uci, libopenssl, libjdc_utilities, libcurl
-Source: feeds/jdcloud_packages/service/jdc_net_manager/apps/nm_rule_apply
-Section: opt
-Architecture: ipq
-Installed-Size: 5923
-Description:  rule apply app

@@ -1,5 +1,0 @@
-/usr/sbin/plugin_tool
-/etc/sys_mmonitor.sh
-/etc/init.d/plugin_manager
-/etc/hotplug.d/iface/51-aiecplugin
-/usr/sbin/aiec_manager

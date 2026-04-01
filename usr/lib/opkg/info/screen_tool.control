@@ -1,8 +1,0 @@
-Package: screen_tool
-Version: 1
-Depends: libc, libssp
-Source: package/jdcloud/service/screen_tool
-Section: opt
-Architecture: ipq
-Installed-Size: 3558
-Description:  jdcloud message screen tool

@@ -1,9 +1,0 @@
-Package: qca-son-mem-debug
-Version: local0.0.1-1
-Depends: libc, libssp
-Source: qca/feeds/qca-son-mem-debug/qca-son-mem-debug
-Section: QCA
-Maintainer: Qualcomm Atheros, Inc.
-Architecture: ipq
-Installed-Size: 13079
-Description:  This Package contains the QCA son memory debug

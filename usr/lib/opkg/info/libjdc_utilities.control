@@ -1,8 +1,0 @@
-Package: libjdc_utilities
-Version: 1.0.0
-Depends: libc, libssp, libubox, libubus, libblobmsg-json, libjson-c, libuci, libjdc_uci, libopenssl, libcurl, libpthread
-Source: feeds/jdcloud_packages/libs/libjdc_utilities
-Section: opt
-Architecture: ipq
-Installed-Size: 32514
-Description:  jdcloud utilities

@@ -1,9 +1,0 @@
-Package: miniupnpc
-Version: 2.0.20170509-3
-Depends: libc, libssp, libminiupnpc
-Source: qca/feeds/packages/net/miniupnpc
-Section: net
-Maintainer: Steven Barth <cyrus@openwrt.org>
-Architecture: ipq
-Installed-Size: 26208
-Description:  Lightweight UPnP client

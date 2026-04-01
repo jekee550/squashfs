@@ -1,9 +1,0 @@
-Package: qca-wpa-cli
-Version: local0.0.1-1
-Depends: libc, libssp, librt, libopenssl, libnl
-Source: qca/feeds/qca/net/qca-hostap
-Section: QCA
-Maintainer: Qualcomm Atheros
-Architecture: ipq
-Installed-Size: 43833
-Description:  WPA Supplicant command line interface

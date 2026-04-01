@@ -1,8 +1,0 @@
-Package: qca-diag
-Version: local0.0.1-1
-Depends: libc, libssp, libpthread
-Source: qca/feeds/qca-platform-utils/qca-diag
-Section: QCA
-Architecture: ipq
-Installed-Size: 72572
-Description:  QCA Linux diag software

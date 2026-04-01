@@ -1,9 +1,0 @@
-Package: jdc-base-files
-Version: 1-4.5.3.r4546+r49254
-Depends: libc, libssp, base-files
-Source: feeds/jdcloud_packages/jdc-base-files
-License: GPL-2.0
-Section: opt
-Architecture: ipq
-Installed-Size: 2738
-Description:  This package contains a base filesystem and system scripts for jdcloud OpenWrt.

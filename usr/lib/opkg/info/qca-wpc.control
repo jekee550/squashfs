@@ -1,9 +1,0 @@
-Package: qca-wpc
-Version: local0.0.1-1
-Depends: libc, libssp, libpthread, librt
-Source: qca/feeds/qca/net/qca-wpc
-Section: QCA
-Maintainer: Qualcomm Atheros
-Architecture: ipq
-Installed-Size: 16638
-Description:  QCA Wifi Positioning

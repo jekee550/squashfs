@@ -1,9 +1,0 @@
-Package: kmod-emesh-sp
-Version: 4.4.60+local0.0.1-1
-Depends: kernel (=4.4.60-1-3ee98c57b1216d17ff25499ba71cfacb)
-Source: qca/feeds/networking/emesh-sp
-Section: kernel
-Maintainer: Qualcomm Technologies, Inc.
-Architecture: ipq
-Installed-Size: 4856
-Description:  This is the kernel module for Service Prioritization in EasyMesh

@@ -1,8 +1,0 @@
-Package: libnm_uci_config
-Version: 1.0-1
-Depends: libc, libssp, libuci, libjson-c, libjdc_uci, libjdc_utilities, libsqlite3
-Source: feeds/jdcloud_packages/service/jdc_net_manager/libs/libnm_uci_config
-Section: opt
-Architecture: ipq
-Installed-Size: 41229
-Description:  uci lib config 

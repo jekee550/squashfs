@@ -1,9 +1,0 @@
-/etc/appfilter/app_class.txt
-/etc/config/jd_feature
-/etc/jd_feature.cfg
-/etc/init.d/appfilter
-/sbin/jdcapi_net_manager.sh
-/usr/bin/gen_class.sh
-/sbin/nm_tools
-/etc/harm_website.csv.enc
-/usr/bin/oafd

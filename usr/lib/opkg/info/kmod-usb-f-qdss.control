@@ -1,8 +1,0 @@
-Package: kmod-usb-f-qdss
-Version: 4.4.60+1-1
-Depends: kernel (=4.4.60-1-3ee98c57b1216d17ff25499ba71cfacb), kmod-usb-lib-composite, kmod-usb-configfs, kmod-lib-crc-ccitt, kmod-usb-dwc3, kmod-usb-dwc3-qcom, kmod-usb-core
-Source: qca/feeds/platform_utils/platform_drivers
-Section: kernel
-Architecture: ipq
-Installed-Size: 8548
-Description:  USB QDSS

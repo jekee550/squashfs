@@ -1,8 +1,0 @@
-Package: libubus_ht
-Version: 0.1
-Depends: libc, libssp, rpcd
-Source: feeds/jdcloud_packages/libs/libubus_ht
-Section: opt
-Architecture: ipq
-Installed-Size: 3701
-Description:  Provides the ubus call API.

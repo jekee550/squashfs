@@ -1,9 +1,0 @@
-Package: fwtool
-Version: 2
-Depends: libc, libssp
-Source: package/system/fwtool
-Section: utils
-Maintainer: Felix Fietkau <nbd@nbd.name>
-Architecture: ipq
-Installed-Size: 4515
-Description:  Utility for appending and extracting firmware metadata and signatures

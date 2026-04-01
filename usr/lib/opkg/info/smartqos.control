@@ -1,8 +1,0 @@
-Package: smartqos
-Version: 1
-Depends: libc, libssp, librt, libpthread, libuci, libjson-c, tc, gargoyle-firewall-util, libjdc_uci
-Source: feeds/jdcloud_packages/service/smartqos
-Section: opt
-Architecture: ipq
-Installed-Size: 16259
-Description:  User mode daemon for QOS

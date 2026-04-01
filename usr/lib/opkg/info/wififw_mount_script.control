@@ -1,9 +1,0 @@
-Package: wififw_mount_script
-Version: 1
-Depends: libc, libssp
-Source: qca/feeds/platform_utils/net/wireless
-Section: firmware mount
-Architecture: ipq
-Installed-Size: 3459
-Description:  This package contains a  wifi fw mount  script which can be used
- to mount WIFIFE partition in to RFS.

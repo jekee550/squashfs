@@ -1,9 +1,0 @@
-Package: qca-whc-lbd
-Version: local0.0.1-1
-Depends: libc, libssp, qca-whc-init, libhyficommon, libpthread, jansson, libwifisoncfg, qca-wifison-ext-lib, libieee1905, qca-son-mem-debug
-Source: qca/feeds/whc/qca-whc-lbd
-Section: QCA
-Maintainer: Qualcomm Atheros
-Architecture: ipq
-Installed-Size: 163777
-Description:  This package installs the Whole Home Coverage Load Balancing daemon

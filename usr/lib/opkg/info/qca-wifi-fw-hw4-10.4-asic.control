@@ -1,9 +1,0 @@
-Package: qca-wifi-fw-hw4-10.4-asic
-Version: WLAN.BL.3.15-00023-S-1-1
-Depends: libc, libssp
-Source: qca/feeds/qca/net/qca-wifi-fw-10.4
-Section: QCA
-Maintainer: Qualcomm Atheros
-Architecture: all
-Installed-Size: 1078885
-Description:  This package contains the qca-wifi firmware used in 10.x drivers

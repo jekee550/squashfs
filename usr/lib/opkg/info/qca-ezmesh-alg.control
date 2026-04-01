@@ -1,9 +1,0 @@
-Package: qca-ezmesh-alg
-Version: g3a89e42-1
-Depends: libc, libssp, kmod-qca-hyfi-bridge, qca-libhyfi-bridge, qca-hyctl, libhyficommon, libwifisoncfg, libpthread, libubus, libubox, libuci, libwpa2, jansson, breakpad-wrapper, qca-son-mem-debug, bridge, qti-autorole
-Source: qca/feeds/qca-ezmesh/qca-ezmesh
-Section: QTI
-Maintainer: Qualcomm Technologies, Inc
-Architecture: ipq
-Installed-Size: 180151
-Description:  This package installs Full-Mode/Co-located Controller specific algorithm library for the Mesh Application Daemon

@@ -1,9 +1,0 @@
-Package: jdcbox
-Version: 2.0.0-20240722
-Depends: libc, libssp
-Source: feeds/jdcloud_packages/service/jdcbox
-Section: opt
-Maintainer: jdcloud
-Architecture: ipq
-Installed-Size: 1383
-Description:  jdcbox

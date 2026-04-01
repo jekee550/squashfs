@@ -1,5 +1,0 @@
-/etc/init.d/jdc_guard
-/usr/bin/jdc-system-regular-check.sh
-/usr/bin/fix-jdc-system.sh
-/usr/sbin/jdc_guard
-/usr/bin/fix-jdc-plugin.sh

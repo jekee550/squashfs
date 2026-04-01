@@ -1,8 +1,0 @@
-Package: jdc_agent
-Version: 4.0.0-1
-Depends: libc, libssp, libopenssl, libuci, libubox, libubus, libblobmsg-json, libjson-c, libcurl, libjdc_uci, libjdc_utilities
-Source: feeds/jdcloud_packages/service/jdc_agent
-Section: opt
-Architecture: ipq
-Installed-Size: 144084
-Description:  JD jdc_agent V4.0 support all JD product and app4.0 interface

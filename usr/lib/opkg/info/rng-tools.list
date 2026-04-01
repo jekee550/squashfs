@@ -1,4 +1,0 @@
-/etc/init.d/rngd
-/usr/bin/rngtest
-/etc/hotplug.d/iface/90-rngd
-/sbin/rngd

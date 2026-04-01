@@ -1,9 +1,0 @@
-Package: ybbplugin
-Version: 0.0.1
-Depends: libc, libssp
-Source: feeds/jdcloud_packages/3rdparty/ybbplugin
-Section: opt
-Maintainer: jdcloud
-Architecture: ipq
-Installed-Size: 2754786
-Description:  ybbplugin

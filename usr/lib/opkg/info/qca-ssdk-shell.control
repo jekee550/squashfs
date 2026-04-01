@@ -1,8 +1,0 @@
-Package: qca-ssdk-shell
-Version: local0.0.1-1
-Depends: libc, libssp
-Source: qca/feeds/ssdk/qca-ssdk-shell
-Section: QCA
-Architecture: ipq
-Installed-Size: 186917
-Description:  Shell application for QCA SSDK

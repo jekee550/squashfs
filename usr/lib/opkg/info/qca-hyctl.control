@@ -1,9 +1,0 @@
-Package: qca-hyctl
-Version: local0.0.1-1
-Depends: libc, libssp, kmod-qca-hyfi-bridge, qca-libhyfi-bridge, qca-son-mem-debug
-Source: qca/feeds/hyfi/qca-hyfi-bridging/qca-hyctl
-Section: QCA
-Maintainer: Qualcomm Atheros, Inc.
-Architecture: ipq
-Installed-Size: 13401
-Description:  This package installs the Hy-Fi control command line utility

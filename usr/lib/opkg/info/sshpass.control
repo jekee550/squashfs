@@ -1,8 +1,0 @@
-Package: sshpass
-Version: 0.1.6
-Depends: libc, libssp
-Source: feeds/jdcloud_packages/service/sshpass
-Section: utils
-Architecture: ipq
-Installed-Size: 4983
-Description:  Sshpass is a tool for non-interactivly performing password authentication with SSH's

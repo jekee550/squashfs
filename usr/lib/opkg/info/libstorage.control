@@ -1,9 +1,0 @@
-Package: libstorage
-Version: local0.0.1-1
-Depends: libc, libssp, libhyficommon, libuci, libwifisoncfg, qca-son-mem-debug
-Source: qca/feeds/ieee1905-security/qca-ieee1905-security-config/libstorage
-Section: QCA
-Maintainer: Qualcomm Atheros, Inc.
-Architecture: ipq
-Installed-Size: 18176
-Description:  This Package installs the Storage Abstration Library

@@ -1,9 +1,0 @@
-Package: breakpad
-Version: 0.1-1
-Depends: libc, libssp, libstdcpp
-Source: qca/feeds/platform_utils/breakpad/breakpad
-Section: BREAKPAD
-Maintainer: Google
-Architecture: ipq
-Installed-Size: 12716
-Description:  breakpad

@@ -1,8 +1,0 @@
-Package: kmod-tmp1628_gpio
-Version: 4.4.60-1
-Depends: kernel (=4.4.60-1-3ee98c57b1216d17ff25499ba71cfacb)
-Source: package/jdcloud/drivers/tmp1628_gpio
-Section: kernel
-Architecture: ipq
-Installed-Size: 4247
-Description:  TM1628A is a special IC for LED (light emitting diode display) drive control with keyboard scanning interface

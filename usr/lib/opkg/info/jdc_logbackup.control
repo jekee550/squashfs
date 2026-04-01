@@ -1,8 +1,0 @@
-Package: jdc_logbackup
-Version: 1
-Depends: libc, libssp, libopenssl, libcurl, libjson-c, libuci, libpthread, libericstools, libnl-tiny, libubus, libblobmsg-json, libubus_ht, libubox, libgcloud_comm
-Source: feeds/jdcloud_packages/service/jdc_logbackup
-Section: opt
-Architecture: ipq
-Installed-Size: 3517
-Description:  jdcloud log backup daemon

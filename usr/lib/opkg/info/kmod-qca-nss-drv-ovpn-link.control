@@ -1,8 +1,0 @@
-Package: kmod-qca-nss-drv-ovpn-link
-Version: 4.4.60+local0.0.1-2
-Depends: kernel (=4.4.60-1-3ee98c57b1216d17ff25499ba71cfacb), kmod-qca-nss-drv-ovpn-mgr, kmod-qca-nss-ecm-premium
-Source: qca/feeds/nss-host/qca-nss-clients
-Section: kernel
-Architecture: ipq
-Installed-Size: 2318
-Description:  Kernel driver for interfacing NSS OpenVPN manager with ECM

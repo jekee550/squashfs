@@ -1,9 +1,0 @@
-Package: downloader
-Version: 0.1.4
-Depends: libc, libssp, libstdcpp, libubox, libubus, libblobmsg-json, libjson-c, libcurl, libopenssl
-Source: feeds/jdcloud_packages/service/downloader
-Section: opt
-Maintainer: jdcloud
-Architecture: ipq
-Installed-Size: 1555609
-Description:  downloader

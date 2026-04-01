@@ -1,8 +1,0 @@
-Package: uboot-2016-ipq6018
-Version: local0.0.1-1
-Depends: libc, libssp
-Source: qca/feeds/bootloader/uboot-qca
-Section: boot
-Architecture: ipq
-Installed-Size: 105
-Description:  U-boot for IPQ6018 based platforms

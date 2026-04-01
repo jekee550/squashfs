@@ -1,9 +1,0 @@
-Package: qti-autorole
-Version: local0.0.1-1
-Depends: libc, libssp
-Source: qca/feeds/qca-lib/qca-wifison-ext-lib
-Section: QTI
-Maintainer: Qualcomm Technologies, Inc.
-Architecture: ipq
-Installed-Size: 4350
-Description:  This Package contains the Dynamic Role Config of CAP/RE (Controller/Agent)

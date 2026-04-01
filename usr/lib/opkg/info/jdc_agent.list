@@ -1,8 +1,0 @@
-/etc/init.d/jdc_agent
-/usr/lib/lua/joylink-errcode.lua
-/usr/sbin/jdc_joylink_api.lua
-/usr/lib/lua/jdc_joylink_local.lua
-/usr/sbin/jdc_pubkey.pem
-/etc/config/jdc_system
-/usr/sbin/jdc_agent
-/etc/config/joylink

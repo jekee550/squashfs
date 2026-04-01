@@ -1,9 +1,0 @@
-Package: libieee1905
-Version: local0.0.1-1
-Depends: libc, libssp, libhyficommon, qca-son-mem-debug
-Source: qca/feeds/ieee1905-security/qca-ieee1905-security-config/libieee1905
-Section: QCA
-Maintainer: Qualcomm Atheros, Inc.
-Architecture: ipq
-Installed-Size: 8473
-Description:  This Package contains the IEEE1905.1 library

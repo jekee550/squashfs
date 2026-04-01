@@ -1,8 +1,0 @@
-/usr/sbin/mcsd
-/usr/sbin/mcst
-/etc/hotplug.d/net/28-mcsd
-/etc/uci-defaults/qca-mcsd
-/etc/init.d/mcsd
-/etc/hotplug.d/iface/78-mcsd
-/etc/config/mcsd
-/usr/sbin/mcsctl

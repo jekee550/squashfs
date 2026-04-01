@@ -1,8 +1,0 @@
-Package: kmod-qca-nss-drv-map-t
-Version: 4.4.60+local0.0.1-2
-Depends: kernel (=4.4.60-1-3ee98c57b1216d17ff25499ba71cfacb), kmod-qca-nss-drv, kmod-nat46
-Source: qca/feeds/nss-host/qca-nss-clients
-Section: kernel
-Architecture: ipq
-Installed-Size: 8137
-Description:  Kernel driver for NSS (connection manager) - MAP-T

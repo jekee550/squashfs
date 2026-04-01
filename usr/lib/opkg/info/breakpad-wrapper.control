@@ -1,8 +1,0 @@
-Package: breakpad-wrapper
-Version: 1.0-1
-Depends: libc, libssp, breakpad, libstdcpp
-Source: qca/feeds/platform_utils/breakpad/breakpad-wrapper
-Section: breakpad-wrapper
-Architecture: ipq
-Installed-Size: 49960
-Description:  Breakpad Wrapper Shared Library for QSDK.

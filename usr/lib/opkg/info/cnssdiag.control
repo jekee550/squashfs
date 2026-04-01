@@ -1,9 +1,0 @@
-Package: cnssdiag
-Version: local0.0.1
-Depends: libc, libssp, qca-diag, libnl
-Source: qca/feeds/qca/utils/cnssdiag
-Section: QCA
-Maintainer: Qualcomm Atheros
-Architecture: ipq
-Installed-Size: 56726
-Description:  QCA cnssdiag utils

@@ -1,8 +1,0 @@
-Package: plugin_manager
-Version: 2.0.4
-Depends: libc, libssp, libcurl, libjson-c, libpthread, libuci
-Source: feeds/jdcloud_packages/service/plugin_manager
-Section: opt
-Architecture: ipq
-Installed-Size: 30069
-Description:  plugin_manager daemon

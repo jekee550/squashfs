@@ -1,8 +1,0 @@
-Package: kmod-diag-char
-Version: 4.4.60+1-1
-Depends: kernel (=4.4.60-1-3ee98c57b1216d17ff25499ba71cfacb), kmod-lib-crc-ccitt, kmod-usb-f-diag, kmod-usb-core
-Source: qca/feeds/platform_utils/platform_drivers
-Section: kernel
-Architecture: ipq
-Installed-Size: 82957
-Description:  CHAR DIAG

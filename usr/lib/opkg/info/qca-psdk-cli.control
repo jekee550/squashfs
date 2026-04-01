@@ -1,8 +1,0 @@
-Package: qca-psdk-cli
-Version: local0.0.1-1
-Depends: libc, libssp
-Source: qca/feeds/ssdk/qca-psdk
-Section: QCA
-Architecture: ipq
-Installed-Size: 15973
-Description:  Shell application for QCA PSDK
