@@ -1,0 +1,10 @@
+Package: fcgiwrap
+Version: 1.1.0-1
+Depends: libc, libssp, fcgi
+Source: feeds/jdcloud_packages/service/fcgiwrap
+License: MIT
+Section: net
+Maintainer: yhfudev
+Architecture: ipq
+Installed-Size: 7529
+Description:  Simple FastCGI wrapper for CGI scripts

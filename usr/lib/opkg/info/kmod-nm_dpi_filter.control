@@ -1,0 +1,8 @@
+Package: kmod-nm_dpi_filter
+Version: 4.4.60-1
+Depends: kernel (=4.4.60-1-3ee98c57b1216d17ff25499ba71cfacb)
+Source: feeds/jdcloud_packages/service/jdc_net_manager/kernel_modules/nm_dpi_filter
+Section: kernel
+Architecture: ipq
+Installed-Size: 924463
+Description:  dpi and filter kernel module

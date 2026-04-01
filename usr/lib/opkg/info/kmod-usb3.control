@@ -1,0 +1,10 @@
+Package: kmod-usb3
+Version: 4.4.60-1
+Depends: kernel (=4.4.60-1-3ee98c57b1216d17ff25499ba71cfacb), kmod-usb-core
+Source: package/kernel/linux
+License: GPLv2
+Section: kernel
+Status: unknown hold not-installed
+Architecture: ipq
+Installed-Size: 72771
+Description:  Kernel support for USB3 (XHCI) controllers

@@ -1,0 +1,10 @@
+Package: kmod-ipt-ct-sctp
+Version: 4.4.60-1
+Depends: kernel (=4.4.60-1-3ee98c57b1216d17ff25499ba71cfacb), kmod-ipt-core, kmod-ipt-conntrack
+Source: package/kernel/linux
+License: GPLv2
+Section: kernel
+Status: unknown hold not-installed
+Architecture: ipq
+Installed-Size: 6049
+Description:  Kernel modules for sctp conntrack

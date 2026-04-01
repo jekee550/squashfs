@@ -1,0 +1,9 @@
+Package: qca-cfg80211
+Version: local0.0.1-1
+Depends: libc, libssp, libnl, libpthread, iw
+Source: qca/feeds/qca/utils/qca-cfg80211
+Section: QCA
+Maintainer: Qualcomm Atheros
+Architecture: ipq
+Installed-Size: 6659
+Description:  QCA cfg80211 utils

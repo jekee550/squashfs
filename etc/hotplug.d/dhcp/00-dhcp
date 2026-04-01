@@ -1,0 +1,5 @@
+#!/bin/sh
+
+[ "$ACTION" = add -o "$ACTION" = update ] || exit 0
+
+[ -f /usr/sbin/mesh5g2sync.sh ] && /usr/sbin/mesh5g2sync.sh "dhcp-$ACTION" "$IPADDR" "$MACADDR" &

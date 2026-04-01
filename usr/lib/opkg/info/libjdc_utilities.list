@@ -1,0 +1,14 @@
+/etc/init.d/libjdc_utilities
+/libjdc_utilities
+/usr/lib/libjdc_utilities.so
+/usr/sbin/jdc_update_public_ip
+/usr/sbin/jd_led_plan.sh
+/usr/sbin/jd_hotplug_port.sh
+/usr/sbin/jdc_utils
+/usr/sbin/jdc_downloader
+/usr/share/udhcpc/check.script
+/usr/sbin/jd_pcdn_control.sh
+/usr/sbin/jd_process_hosts.sh
+/usr/sbin/jd_led.sh
+/etc/config/jd_wol
+/usr/sbin/send2agent

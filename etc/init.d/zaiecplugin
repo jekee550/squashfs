@@ -1,0 +1,45 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2006 OpenWrt.org
+
+START=99
+boot() {
+	#save private_key
+	i=1
+	private_key_uci="$(uci -q get joylink.config.privatekey)"
+	while [ $i -le 3 ]
+	do
+		private_key=`factory_hm info |grep Private |awk -F '=' '{print $2}'`
+		if [ -n "$private_key" ];then
+			[ "$private_key_uci" != "$private_key" ] && {
+				uci set joylink.config.privatekey="$private_key"
+				logger 'privatekey is different, save to uci!'
+				uci commit joylink
+			}
+			break
+		fi
+		sleep 2
+		let i++
+	done
+	[ -z "$private_key" ] && logger 'get privatekey failed!'
+	#start plugin
+	sleep 10
+
+	/etc/init.d/jdcbox restart
+	/etc/ipt_resource_limit.sh
+
+	for plugin in `ls /opt/etc/init.d/`
+	do
+		[ "$plugin" = "jdcplugin_opt" ] && {
+			opkg remove jdcplugin_opt --force-remove
+			uci delete jd_plugin.jdcplugin_opt
+			uci commit jd_plugin
+			continue
+		}
+		[ -n "$(cat /opt/usr/lib/opkg/status | grep -w $plugin)" -o -n "$(uci get jd_plugin.$plugin)" ] && {
+			/opt/etc/init.d/$plugin start &
+			sleep 1
+		}
+	done
+	touch /tmp/.bootdone
+	/sbin/jd_boot_net_detect.sh &
+}

@@ -1,0 +1,11 @@
+Package: iptables-mod-fullconenat
+Version: 2018-12-15-d4daedd0-1
+Depends: libc, libssp, iptables, kmod-ipt-fullconenat
+Source: feeds/jdcloud_packages/service/openwrt-fullconenat
+License: GPL-2.0
+LicenseFiles: LICENSE
+Section: net
+Maintainer: Chion Tang <tech@chionlab.moe>
+Architecture: ipq
+Installed-Size: 2407
+Description:  FULLCONENAT iptables extension

@@ -1,0 +1,6 @@
+/usr/sbin/qos_rule_check.sh
+/etc/ae_mode.sh
+/etc/init.d/smart_qos
+/etc/ipt_qosnss.sh
+/etc/config/smartqos
+/usr/sbin/smartqos

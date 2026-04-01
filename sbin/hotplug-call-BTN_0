@@ -1,0 +1,15 @@
+#!/bin/sh
+# Copyright (C) 2006-2010 OpenWrt.org
+
+export HOTPLUG_TYPE="$1"
+
+. /lib/functions.sh
+
+PATH=/usr/sbin:/usr/bin:/sbin:/bin:/opt/sbin:/opt/usr/bin:/opt/usr/sbin
+LOGNAME=root
+USER=root
+export PATH LOGNAME USER
+export DEVICENAME="${DEVPATH##*/}"
+script=/etc/rc.button/BTN_0
+
+[ -f $script ] && . $script

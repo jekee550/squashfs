@@ -1,0 +1,46 @@
+#!/bin/sh
+
+[ "$ACTION" = ifup -o "$ACTION" = ifupdate ] || exit 0
+[ "$ACTION" = ifupdate -a -z "$IFUPDATE_ADDRESSES" -a -z "$IFUPDATE_DATA" ] && exit 0
+
+if [ "$(uci get network.lan.proto)" = "static" ]; then
+   [ "$ACTION" = ifup -a "$INTERFACE" = "wan" ] && {
+	   proto=$(uci -q get network.wan.proto)
+		   ifname1=$(uci -q get network.wan.ifname)
+		   ifname2=$(uci -q get network.wan.device)
+		   if [ ! -e /tmp/.uplink_info ]; then
+			   if [ "$ifname1" != "" ];then
+				   echo $proto$ifname1 > /tmp/.uplink_info
+				fi
+
+				if [ "$ifname2" != "" ];then
+					echo $proto$ifname2 > /tmp/.uplink_info
+				fi
+            else
+				[ "$(cat /tmp/.uplink_info)" != "$proto$ifname1" -a "$(cat /tmp/.uplink_info)" != "$proto$ifname2"  ] && {
+					if [ "$ifname1" != "" ];then                    
+						echo $proto$ifname1 > /tmp/.uplink_info
+					fi                                     
+                                                               
+					if [ "$ifname2" != "" ];then           
+						echo $proto$ifname2 > /tmp/.uplink_info
+                    fi 
+					plugin_tool 4
+					logger  "aiecplugin Restart due to $ACTION of $INTERFACE ($DEVICE)"
+				}
+            fi
+        }
+else
+    [ "$ACTION" = ifup -a "$INTERFACE" = "lan" ] && {
+		if [ ! -e /tmp/.uplink_info ]; then      
+			echo "br-lan" > /tmp/uplink_info
+		else                                   
+			[ "$(cat /tmp/.uplink_info)" != "br-lan" ] && {
+				echo "br-lan" > /tmp/.uplink_info
+					plugin_tool 4
+					logger  "aiecplugin Restart due to $ACTION of $INTERFACE ($DEVICE)"
+			}     
+		fi
+	}
+fi
+

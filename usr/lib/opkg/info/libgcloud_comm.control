@@ -1,0 +1,8 @@
+Package: libgcloud_comm
+Version: 1.0.0-1
+Depends: libc, libssp, libopenssl, libcurl, libjson-c, libuci, libpthread
+Source: feeds/jdcloud_packages/libs/gcloud_comm
+Section: opt
+Architecture: ipq
+Installed-Size: 3984
+Description:  a common function for every mod

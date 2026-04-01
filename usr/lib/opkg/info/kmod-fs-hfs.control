@@ -1,0 +1,10 @@
+Package: kmod-fs-hfs
+Version: 4.4.60-1
+Depends: kernel (=4.4.60-1-3ee98c57b1216d17ff25499ba71cfacb), kmod-nls-base
+Source: package/kernel/linux
+License: GPLv2
+Section: kernel
+Status: unknown hold not-installed
+Architecture: ipq
+Installed-Size: 25478
+Description:  Kernel module for HFS filesystem support

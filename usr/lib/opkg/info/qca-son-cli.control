@@ -1,0 +1,9 @@
+Package: qca-son-cli
+Version: local0.0.1-1
+Depends: libc, libssp, libpthread, libnl, libnl-genl, libhyficommon, qca-cfg80211
+Source: qca/feeds/hyfi/qca-son-cli
+Section: QCA
+Maintainer: Qualcomm Atheros
+Architecture: ipq
+Installed-Size: 13905
+Description:  This package installs the SON_CLI Tool

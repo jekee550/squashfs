@@ -1,0 +1,8 @@
+Package: kmod-qca-nss-drv-mscs
+Version: 4.4.60+local0.0.1-2
+Depends: kernel (=4.4.60-1-3ee98c57b1216d17ff25499ba71cfacb), kmod-qca-nss-drv, kmod-qca-nss-ecm-premium, kmod-qca-wifi
+Source: qca/feeds/nss-host/qca-nss-clients
+Section: kernel
+Architecture: ipq
+Installed-Size: 1844
+Description:  NSS Module to interface between wlan host driver and ECM MSCS classifier.

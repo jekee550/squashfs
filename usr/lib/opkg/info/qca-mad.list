@@ -1,0 +1,5 @@
+/usr/sbin/mat
+/etc/init.d/mesh_app
+/etc/config/mesh_app
+/usr/sbin/mesh_app
+/usr/sbin/de_nb_client

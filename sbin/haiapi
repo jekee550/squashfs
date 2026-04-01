@@ -1,0 +1,443 @@
+#!/bin/sh
+#
+# This script provide a interface for PCDN
+#
+. /lib/functions.sh
+
+PROG=$0
+CMD=
+
+readonly LOCK_FILE="/var/lock/haiapi.lock"
+usage ()
+{
+	[ -n "$1" ] && echo $1 1>&2
+	cat <<EOF 1>&2
+Usage: $PROG call param(JSON OBJECT)
+
+Example:
+	$PROG call '{"payload":[{"method":"pcdniqiyi.get_system_info"}],"version":"1.0.0","action":"call"}'
+	$PROG call '{"payload":[{"method":"system.get_system_info"}],"version":"1.0.0","action":"call"}'
+	$PROG call '{"version":"1.0.0","action":"call","payload":[{"method":"firewall.set_port_access","data":{"dest_port":18888,"proto":"both"}}]}'
+	$PROG call '{"version":"1.0.0","action":"call","payload":[{"method":"firewall.del_port_access","data":{"dest_port":18888,"proto":"both"}}]}'
+	$PROG call '{"payload":[{"method":"firewall.get_port_access_list"}],"version":"1.0.0","action":"call"}'
+EOF
+	exit 1
+}
+
+# add port & proto list
+list_add()
+{
+        local port
+        local proto
+		
+        config_get src_port $1 src_port
+        config_get dest_port $1 dest_port
+        config_get proto $1 proto
+		
+
+
+		[ ! -z $dest_port ] && {
+			json_add_object
+			json_add_string "dest_port" "$dest_port"
+			json_add_string "proto" "$proto"
+			json_close_object
+		}
+
+		[ ! -z $src_port ] && {
+			json_add_object
+			json_add_string "src_port" "$src_port"
+			json_add_string "proto" "$proto"
+			json_close_object
+		}
+
+}
+
+# mehhod of interface
+#methods=(pcdniqiyi.get_system_info firewall.set_port_access firewall.del_port_access firewall.get_port_access_list)
+
+haiapi_handle()
+{
+	method=$1
+	version_out=$2
+	port=$3
+	proto=$4
+	sdpt=$5
+	need_save=$6
+
+	[ -z $method ] && {
+		echo "method fail"
+		return 1
+	}
+	
+	
+	[ $method = "system.get_system_info" ] && {
+		# system.get_system_info
+		mac_org=`factory_hm info |grep eth1 |awk -F 'mac=' '{print $2}'`
+		[ -z "$mac_org" ] && mac_org="$(uci -q get network.lan.macaddr)"
+		mac=`echo $mac_org | sed 's/://g' | tr '[a-z]' '[A-Z]'`
+		version=`cat /etc/openwrt_version`
+		model="JDRouter01"
+		private_key="$(uci -q get joylink.config.privatekey)"
+		[ -z "$private_key" ] && private_key=`factory_hm info |grep Private |awk -F '=' '{print $2}'`
+		[ -z "$private_key" ] && logger "get private_key failed!"
+
+		# response
+		json_init
+
+		# result
+		json_add_array "result"
+		json_add_object
+		json_add_string "msg" "OK"
+		json_add_object "data"
+		json_add_string "mac" "$mac"
+		json_add_string "version" "$version"
+		json_add_string "model" "$model"
+		json_close_object
+		json_add_string "code" "0x0"
+		json_close_object
+		json_close_array
+		# end of result
+
+		# get plugin version
+		json_add_string "version" "$version_out"
+		json_close_object
+		json_dump
+	}
+
+
+	[ $method = "pcdniqiyi.get_system_info" ] && {
+		# iqiyi get system info
+		mac_org=`factory_hm info |grep eth1 |awk -F 'mac=' '{print $2}'`
+		[ -z "$mac_org" ] && mac_org="$(uci -q get network.lan.macaddr)"
+		mac=`echo $mac_org | sed 's/://g' | tr '[a-z]' '[A-Z]'`
+		version=`cat /etc/openwrt_version`
+		model="JDRouter01"
+		private_key="$(uci -q get joylink.config.privatekey)"
+		[ -z "$private_key" ] && private_key=`factory_hm info |grep Private |awk -F '=' '{print $2}'`
+		[ -z "$private_key" ] && logger "get private_key failed!"
+		uuid=`echo -n ${private_key} | md5sum | awk '{print $1}'`
+		# response
+		json_init
+
+		# result
+		json_add_array "result"
+		json_add_object
+		json_add_string "msg" "OK"
+		json_add_object "data"
+		json_add_string "mac" "$mac"
+		json_add_string "uuid" "$uuid"
+		json_add_string "version" "$version"
+		json_add_string "model" "$model"
+		json_close_object
+		json_add_string "code" "0x0"
+		json_close_object
+		json_close_array
+		# end of result
+
+		# get plugin version
+		json_add_string "version" "$version_out"
+		json_close_object
+		json_dump
+	}
+
+	[ $method = "firewall.set_port_access" ] && {
+
+		uci_proto=$proto
+
+		# set port access
+		[ ! -z $proto ] && [ $proto = "both" ] && {
+			proto="udp tcp"
+			uci_proto="both"
+		}
+		
+		#### handle with port  ####
+		# new & modify
+		
+		[ ! -z $port ]&& {
+			uciport="$(echo $port | tr ':' '_')"
+			#if [ "$need_save" = "1" ];then
+				uci set haiapi.ports${uciport}=portaccess
+				uci set haiapi.ports${uciport}.${sdpt}=${port}
+				uci set haiapi.ports${uciport}.proto=${uci_proto}
+				#uci commit haiapi
+
+				# set firewall uci
+				uci set firewall.portaccess${uciport}=rule
+				uci set firewall.portaccess${uciport}.${sdpt}=$port
+				uci set firewall.portaccess${uciport}.proto="$proto"
+				uci set firewall.portaccess${uciport}.name=portaccess${port}
+				uci set firewall.portaccess${uciport}.target="ACCEPT"
+				uci set firewall.portaccess${uciport}.src="wan"
+				#uci commit firewall
+			#fi
+			
+			#iptables 直接配置规则 热生效
+			#iptables -A zone_wan_input -p tcp -m tcp --sport 18888 --dport 18888 -m comment --comment portaccess18888 -j ACCEPT
+			if [ ${sdpt} = "dest_port" ]; then
+				targetport="dport"
+			else
+				targetport="sport"
+			fi			
+			
+			if [ ${uci_proto} = "both" ];then
+
+				iptables -w -D zone_wan_input -p tcp --$targetport $port -m comment --comment "!fw3: portaccess${port}" -j ACCEPT 2>/dev/null
+				iptables -w -D zone_wan_input -p udp --$targetport $port -m comment --comment "!fw3: portaccess${port}" -j ACCEPT 2>/dev/null
+				i6tables -w -D zone_wan_input -p tcp --$targetport $port -m comment --comment "!fw3: portaccess${port}" -j ACCEPT 2>/dev/null
+				ip6tables -w -D zone_wan_input -p udp --$targetport $port -m comment --comment "!fw3: portaccess${port}" -j ACCEPT 2>/dev/null
+				#iptables -t nat -D zone_wan_prerouting -p udp -m udp --$targetport $port -m comment --comment "portaccess${port}" -j ACCEPT 2>/dev/null
+				#iptables -t nat -D zone_wan_prerouting -p tcp -m tcp --$targetport $port -m comment --comment "portaccess${port}" -j ACCEPT 2>/dev/null
+
+				iptables -w -I zone_wan_input -p tcp --$targetport $port -m comment --comment "!fw3: portaccess${port}" -j ACCEPT
+				iptables -w -I zone_wan_input -p udp --$targetport $port -m comment --comment "!fw3: portaccess${port}" -j ACCEPT
+				ip6tables -w -I zone_wan_input -p tcp --$targetport $port -m comment --comment "!fw3: portaccess${port}" -j ACCEPT
+				ip6tables -w -I zone_wan_input -p udp --$targetport $port -m comment --comment "!fw3: portaccess${port}" -j ACCEPT
+				#iptables -t nat -I zone_wan_prerouting -p udp -m udp --$targetport $port -m comment --comment "portaccess${port}" -j ACCEPT
+				#iptables -t nat -I zone_wan_prerouting -p tcp -m tcp --$targetport $port -m comment --comment "portaccess${port}" -j ACCEPT
+			fi
+			
+			if [ ${uci_proto} = "tcp" ];then
+				iptables -w -D zone_wan_input -p tcp --$targetport $port -m comment --comment "!fw3: portaccess${port}" -j ACCEPT 2>/dev/null
+				ip6tables -w -D zone_wan_input -p tcp --$targetport $port -m comment --comment "!fw3: portaccess${port}" -j ACCEPT 2>/dev/null
+				#iptables -t nat -D zone_wan_prerouting -p tcp -m tcp --$targetport $port -m comment --comment "portaccess${port}" -j ACCEPT 2>/dev/null
+			
+				iptables -w -I zone_wan_input -p tcp --$targetport $port -m comment --comment "!fw3: portaccess${port}" -j ACCEPT
+				ip6tables -w -I zone_wan_input -p tcp --$targetport $port -m comment --comment "!fw3: portaccess${port}" -j ACCEPT
+				#iptables -t nat -I zone_wan_prerouting -p tcp -m tcp --$targetport $port -m comment --comment "portaccess${port}" -j ACCEPT
+			fi			
+			
+			if [ ${uci_proto} = "udp" ];then
+				iptables -w -D zone_wan_input -p udp --$targetport $port -m comment --comment "!fw3: portaccess${port}" -j ACCEPT 2>/dev/null
+				ip6tables -w -D zone_wan_input -p udp --$targetport $port -m comment --comment "!fw3: portaccess${port}" -j ACCEPT 2>/dev/null
+				#iptables -t nat -D zone_wan_prerouting -p udp -m udp --$targetport $port -m comment --comment "portaccess${port}" -j ACCEPT 2>/dev/null
+			
+				iptables -w -I zone_wan_input -p udp --$targetport $port -m comment --comment "!fw3: portaccess${port}" -j ACCEPT
+				ip6tables -w -I zone_wan_input -p udp --$targetport $port -m comment --comment "!fw3: portaccess${port}" -j ACCEPT
+				#iptables -t nat -I zone_wan_prerouting -p udp -m udp --$targetport $port -m comment --comment "portaccess${port}" -j ACCEPT
+			fi				
+			
+		}
+
+		# restart firewall
+		#/etc/init.d/firewall restart &
+
+		# response
+		json_init
+
+		#result
+		json_add_array "result"
+		json_add_object
+		json_add_string "msg" "OK"
+		json_add_array "data"
+		json_close_array
+		json_add_string "code" "0x0"
+		json_close_object
+		json_close_array
+		# end of result
+
+		# get plugin version
+		json_add_string "version" "$version_out"
+		json_close_object
+		json_dump
+	}
+
+	[ $method = "firewall.del_port_access" ] && {
+	
+		uci_proto=$proto
+		
+		# delete port access
+		[ -z $port ] && {
+			echo "port data null, failed"
+			return 1
+		}
+		uciport="$(echo $port | tr ':' '_')"
+
+		#src_port为udp 1900时，不做任何处理
+		if [ "$uciport" != "1900" -o "$sdpt" != "src_port" -o "$uci_proto" != "udp" ];then
+
+		# delete
+		# check item exist or not
+		portsnum=`uci get haiapi.ports${uciport}.${sdpt} 2>/dev/null`
+		[ -z $portsnum ] || {
+			uci delete haiapi.ports${uciport}.${sdpt}
+			#uci commit haiapi
+
+			srcportnum=`uci get haiapi.ports${uciport}.src_port 2>/dev/null`
+			destportnum=`uci get haiapi.ports${uciport}.dest_port 2>/dev/null`
+			[ -z $srcportnum ] && [ -z $destportnum ] && {
+				uci delete haiapi.ports${uciport}
+				#uci commit haiapi
+			}
+
+			#uci commit haiapi
+		}		
+		
+		
+		# check item exist or not
+		item=`uci get firewall.portaccess${uciport}.${sdpt} 2>/dev/null`
+		[ -z $item ] || {
+
+			uci delete firewall.portaccess${uciport}.${sdpt}
+			uci commit firewall
+
+			srcport=`uci get firewall.portaccess${uciport}.src_port 2>/dev/null`
+			destport=`uci get firewall.portaccess${uciport}.dest_port 2>/dev/null`
+			[ -z $srcport ] && [ -z $destport ] && {
+				uci delete firewall.portaccess${uciport}
+				uci commit firewall
+			}
+
+			#uci commit firewall
+			
+		
+			
+			# restart firewall
+			#/etc/init.d/firewall restart &
+		}
+		
+		#iptables 直接配置规则 热生效
+		#iptables -D zone_wan_input -p tcp -m tcp --sport 18888 --dport 18888 -m comment --comment portaccess18888 -j ACCEPT
+						
+		if [ ${sdpt} = "dest_port" ]; then
+			targetport="dport"
+		else
+			targetport="sport"
+		fi	
+		if [ ${uci_proto} = "both" ];then
+			iptables -w -D zone_wan_input -p tcp --$targetport $port -m comment --comment "!fw3: portaccess${port}" -j ACCEPT 2>/dev/null
+			iptables -w -D zone_wan_input -p udp --$targetport $port -m comment --comment "!fw3: portaccess${port}" -j ACCEPT 2>/dev/null
+			ip6tables -w -D zone_wan_input -p tcp --$targetport $port -m comment --comment "!fw3: portaccess${port}" -j ACCEPT 2>/dev/null
+			ip6tables -w -D zone_wan_input -p udp --$targetport $port -m comment --comment "!fw3: portaccess${port}" -j ACCEPT 2>/dev/null
+			#iptables -t nat -D zone_wan_prerouting -p udp -m udp --$targetport $port -m comment --comment "portaccess${port}" -j ACCEPT 2>/dev/null
+			#iptables -t nat -D zone_wan_prerouting -p tcp -m tcp --$targetport $port -m comment --comment "portaccess${port}" -j ACCEPT 2>/dev/null
+		fi
+		
+		if [ ${uci_proto} = "tcp" ];then
+			iptables -w -D zone_wan_input -p tcp --$targetport $port -m comment --comment "!fw3: portaccess${port}" -j ACCEPT 2>/dev/null
+			ip6tables -w -D zone_wan_input -p tcp --$targetport $port -m comment --comment "!fw3: portaccess${port}" -j ACCEPT 2>/dev/null
+			#iptables -t nat -D zone_wan_prerouting -p tcp -m tcp --$targetport $port -m comment --comment "portaccess${port}" -j ACCEPT 2>/dev/null
+		fi			
+		
+		if [ ${uci_proto} = "udp" ];then
+			iptables -w -D zone_wan_input -p udp --$targetport $port -m comment --comment "!fw3: portaccess${port}" -j ACCEPT 2>/dev/null
+			ip6tables -w -D zone_wan_input -p udp --$targetport $port -m comment --comment "!fw3: portaccess${port}" -j ACCEPT 2>/dev/null
+			#iptables -t nat -D zone_wan_prerouting -p udp -m udp --$targetport $port -m comment --comment "portaccess${port}" -j ACCEPT 2>/dev/null
+		fi			
+		
+		fi
+		# response
+		json_init
+
+		#result
+		json_add_array "result"
+		json_add_object
+		json_add_string "msg" "OK"
+		json_add_array "data"
+		json_close_array
+		json_add_string "code" "0x0"
+		json_close_object
+		json_close_array
+		# end of result
+
+		# get plugin version
+		json_add_string "version" "$version_out"
+		json_close_object
+		json_dump
+	}
+	
+	[ $method = "firewall.get_port_access_list" ] && {
+		#### get port access list & proto ####
+		# response
+		json_init
+
+		#result
+		json_add_array "result"
+		json_add_object
+		json_add_object "data"
+		json_add_array "port_access_list"
+
+		
+		config_load haiapi
+		config_foreach list_add portaccess
+		
+		
+
+		json_close_array "port_access_list"
+		json_close_object "data"
+
+		json_add_string "code" "0x0"
+		json_close_object
+		json_close_array
+		# end of result
+
+		# get plugin version
+		json_add_string "version" "$version_out"
+		json_close_object
+		json_dump
+	}
+
+}
+
+haiapi_call ()
+{
+	params=$1
+	
+	source /usr/share/libubox/jshn.sh
+	json_load $params
+	json_get_var version version
+	json_get_var action action
+	json_get_var need_save need_save
+
+	json_select
+	if json_get_type Status payload && [ "$Status" = array ]; then
+		json_select payload
+		Index="1"            
+		while json_get_type Status $Index && [ "$Status" = object ]; do
+		json_select "$((Index++))"
+
+		json_get_var method method
+		[ $method = "firewall.get_port_access_list" ] || [ $method = "pcdniqiyi.get_system_info" ] || [ $method = "system.get_system_info" ] ||{
+			json_select data
+
+			json_get_var dest_port dest_port
+			[ ! -z $dest_port ]&& {
+				sdpt="dest_port"
+			}
+			json_get_var src_port src_port
+			[ ! -z $src_port ]&& {
+				sdpt="src_port"
+			}
+
+			json_get_var proto proto
+		}
+		json_select ".."
+		done
+
+		[ ! -z $dest_port ]&& {
+			haiapi_handle $method $version $dest_port $proto $sdpt $need_save
+		}
+		
+		[ ! -z $src_port ]&& {
+			haiapi_handle $method $version $src_port $proto $sdpt $need_save
+		}
+
+		[ -z $src_port ] && [ -z $dest_port ] && {
+			haiapi_handle $method $version
+		}
+
+
+	fi
+}
+
+trap "lock -u $LOCK_FILE" EXIT
+lock $LOCK_FILE
+
+CMD=$1; shift
+[ -z "$CMD" -o "$CMD" = "help" ] && usage
+
+
+case $CMD in
+	call) haiapi_call $@ ;;
+	*) usage "unknown command" ;;
+esac
+

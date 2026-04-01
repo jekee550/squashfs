@@ -1,0 +1,43 @@
+#!/bin/sh
+
+ipv6_enabled=$(uci -q get ipv6.config.enabled)
+ipv6_mode=$(uci -q get ipv6.config.mode)
+ap_mode=$(uci -q get system.@system[0].apmode_init)
+
+[ "$ACTION" = ifdown -a "$INTERFACE" = "wan" ] && {
+	[ "$ipv6_enabled" = "1" -a "$ipv6_mode" = "relay" -a "$ap_mode" = "0" ] && {
+		wan_name="$(uci -q get network.wan.ifname)"
+		if [ "$wan_name" = "ath22" -o "$wan_name" = "ath12" -o "$wan_name" = "ath02" ]; then
+			brctl delif br-lan "$wan_name" 2>/dev/null
+		fi
+	}
+}
+
+[ "$ACTION" = ifup -a "$INTERFACE" = "wan" ] && {
+	[ "$ipv6_enabled" = "1" -a "$ipv6_mode" = "relay" -a "$ap_mode" = "0" ] && {
+		wan_name="$(uci -q get network.wan.ifname)"
+
+		ebtables -t broute -F IPv6_Bridge 2>/dev/null
+		ebtables -t broute -D BROUTING -j IPv6_Bridge 2>/dev/null
+		ebtables -t broute -X IPv6_Bridge 2>/dev/null
+
+		for line in `ip6tables -w -t nat -nvL PREROUTING --line-number | grep -w REDIRECT | grep -w udp | grep -w 53 | awk '{print $1}' | sort -nr`
+		do
+			ip6tables -w -t nat -D PREROUTING $line 2>/dev/null
+		done
+
+		ebtables -t broute -D BROUTING -p ipv6 --ip6-proto udp --ip6-dport 53 -j redirect 2>/dev/null
+
+		brctl delif br-lan "$wan_name" 2>/dev/null
+
+		ebtables -t broute -N IPv6_Bridge
+		ebtables -t broute -I BROUTING -j IPv6_Bridge
+
+		ebtables -t broute -A IPv6_Bridge -p ! ipv6 -j DROP -i "$wan_name"
+
+		ip6tables -t nat -I PREROUTING -p udp -m udp --dport 53 -m string --hex-string "|0b|jdcloudwifi|03|com|" --algo bm --to 65535 --icase -j REDIRECT --to-ports 53
+
+		brctl addif br-lan "$wan_name"
+	}
+}
+

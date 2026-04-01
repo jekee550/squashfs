@@ -1,0 +1,8 @@
+Package: jdc_evtreport
+Version: 1
+Depends: libc, libssp, libopenssl, libcurl, libjson-c, libuci, libpthread, libericstools, libnl-tiny, libubus, libblobmsg-json, libubus_ht, libubox, libjdc_uci, libjdc_utilities
+Source: feeds/jdcloud_packages/service/jdc_evtreport
+Section: opt
+Architecture: ipq
+Installed-Size: 10959
+Description:  jdcloud event report daemon

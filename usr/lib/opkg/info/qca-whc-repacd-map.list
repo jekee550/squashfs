@@ -1,0 +1,4 @@
+/lib/functions/repacd-vlanmon-map.sh
+/lib/functions/repacd-wifimon-map.sh
+/lib/functions/repacd-maplitemode.sh
+/lib/functions/repacd-map.sh

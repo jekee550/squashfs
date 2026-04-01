@@ -1,0 +1,9 @@
+Package: qca-hostap-macsec
+Version: local0.0.1-1
+Depends: libc, libssp, libnl, libopenssl, kmod-qca-nss-macsec
+Source: qca/feeds/qca/net/qca-hostap
+Section: QCA
+Maintainer: Qualcomm Atheros
+Architecture: ipq
+Installed-Size: 620989
+Description:  Hostap authenticator (MACSEC)

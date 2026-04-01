@@ -1,0 +1,9 @@
+Package: qca-wsplcd-map
+Version: local0.0.1-1
+Depends: libc, libssp, qca-ieee1905-init, libhyficommon, libstorage, libwpa2, libieee1905, libuci, libpthread, libwifisoncfg, qca-son-mem-debug, qca-wsplcd-init
+Source: qca/feeds/ieee1905-security/qca-ieee1905-security-config/qca-wsplcd
+Section: QCA
+Maintainer: Qualcomm Atheros, Inc.
+Architecture: ipq
+Installed-Size: 96595
+Description:  This package installs the IEEE 1905.1 AP Auto-Configuration MAP daemon: Wi-Fi credential cloning over backbone network (e.g. HomePlugAV, Ethernet, Wi-Fi)

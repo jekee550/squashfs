@@ -1,0 +1,38 @@
+#!/bin/sh
+
+apmode=$(uci -q get system.@system[0].apmode_init)
+remode=$(uci -q get system.@system[0].re_init)
+if [ "$apmode" == "0" -a "$remode" == "0" ]; then
+	customize_wan=$(uci -q get network.wan.customize_wan)
+	if [ "$customize_wan" != "eth0" -a "$PORT" == "5" ] || [ "$customize_wan" == "eth0" -a "$PORT" == "1" ]; then
+		jd_hotplug_port.sh $LINK &
+		logger -t "hotplug port" "$PORT $LINK $SPEED $DUPLEX"
+		case "$LINK" in
+		"1")
+			if [ "dhcp" = "$(uci -q get network.wan.proto)" -o "static" = "$(uci -q get network.wan.proto)" ];then
+				[ "dhcp" = "$(uci -q get network.wan.proto)" ] && {
+					kill -USR1 $(pidof udhcpc)
+					kill -USR1 $(pidof odhcp6c)
+				}
+				killall -9 native_prefix_check.sh
+				native_prefix_check.sh &
+			fi
+		;;
+		esac
+	fi
+else
+	if [ "$PORT" == "1" -o "$PORT" == "2" -o "$PORT" == "3" -o "$PORT" == "4" -o "$PORT" == "5" ]; then
+		logger -t "hotplug port" "$PORT $LINK $SPEED $DUPLEX"
+		case "$LINK" in
+		"1")
+			ap_port=`/usr/sbin/ap_port_detect.sh`
+			if [ "$ap_port" = "" -o "$ap_port" == "$PORT" ]; then
+				if [ "dhcp" == "$(uci -q get network.lan.proto)" ];then
+					kill -USR1 $(pidof udhcpc)
+					ifup -w lan6
+				fi
+			fi
+		;;
+		esac
+	fi
+fi

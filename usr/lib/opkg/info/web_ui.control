@@ -1,0 +1,10 @@
+Package: web_ui
+Version: 0.3.1
+Depends: libc, libssp, rpcd
+Source: feeds/jdcloud_packages/web_ui
+License: Apache-2.0
+Section: opt
+Maintainer: Jo-Philipp Wich <jow@openwrt.org>
+Architecture: ipq
+Installed-Size: 1432586
+Description:  Provides the jdcloud web interface with standard functionality.

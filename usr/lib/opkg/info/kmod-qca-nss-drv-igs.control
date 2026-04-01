@@ -1,0 +1,8 @@
+Package: kmod-qca-nss-drv-igs
+Version: 4.4.60+local0.0.1-2
+Depends: kernel (=4.4.60-1-3ee98c57b1216d17ff25499ba71cfacb), kmod-qca-nss-drv, kmod-sched-core, kmod-ifb, kmod-qca-nss-drv-qdisc
+Source: qca/feeds/nss-host/qca-nss-clients
+Section: kernel
+Architecture: ipq
+Installed-Size: 7889
+Description:  Action for offloading traffic to an IFB interface to perform ingress shaping.

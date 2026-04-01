@@ -1,0 +1,3 @@
+/etc/modules.d/52-usb-f-qdss
+/lib/modules/4.4.60/usb_f_qdss.ko
+/lib/modules/4.4.60/u_qdss.ko

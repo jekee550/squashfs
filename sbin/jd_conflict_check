@@ -1,0 +1,111 @@
+#!/bin/sh
+[ -z "$1" -o -z "$2" ] && {
+	echo "Error: should give two args at least! like this: conflict_check 10.1.1.1 24" 
+	echo "you also can give the thrid arg to set whether to resolve conflicts automatically"
+	echo "default action is only check"
+} && exit 1
+
+. /lib/functions.sh
+. /lib/netifd/netifd-proto.sh
+
+NET=lan
+ADDR_OFFSET=22
+NEED_RESTART=0
+
+check(){
+	local ip="$1"
+	local mask="$2"
+        local ip_net
+	eval "$(ipcalc.sh "$ip/$mask")";ip_net="$NETWORK";mask_len="$PREFIX"
+
+	#add for conflict check
+
+	if [ "$(uci -q get system.@system[0].apmode_init)" == "1" ]; then
+		local lan_ip=`cat /tmp/.apmode_ipinfo.txt 2>/dev/null |sed -n '1p'`
+		local lan_mask_len=`cat /tmp/.apmode_ipinfo.txt 2>/dev/null |sed -n '2p'`
+	else
+		local lan_ip=`uci -q get network.$NET.ipaddr`
+		local lan_mask=`uci -q get network.$NET.netmask`
+		local lan_net
+		local lan_mask_len
+		eval "$(ipcalc.sh "$lan_ip $lan_mask")";lan_net="$NETWORK";lan_mask_len="$PREFIX"
+	fi
+
+	local min_len=$mask_len
+	[ $lan_mask_len -lt $min_len ] && {
+		min_len=$lan_mask_len
+	}
+
+	eval "$(ipcalc.sh "$lan_ip/$min_len")";tmp_lan_net="$NETWORK"
+	eval "$(ipcalc.sh "$ip/$min_len")";tmp_wan_net="$NETWORK"
+
+	[ "0.0.0.0" == "$tmp_wan_net" ] && return
+
+	if [ "$(uci -q get system.@system[0].apmode_init)" == "1" ]; then
+		[ "0.0.0.0" == "$tmp_lan_net" ] && return
+	fi
+
+	if [ "$(uci -q get system.@system[0].apmode_init)" == "1" ]; then
+		if [ "$tmp_lan_net" != "$tmp_wan_net" ]; then
+			NEED_RESTART=1
+		fi
+	else
+		[ "$tmp_lan_net" == "$tmp_wan_net" ] && {
+			#conflict, need modify lan addr
+			echo "ip conflict detected !!!! $NET net is $tmp_lan_net  wan net is $tmp_wan_net" >/dev/console
+			#echo "ip conflict detected !!!! $NET net is $tmp_lan_net  wan net is $tmp_wan_net" >>/tmp/lhch.txt
+			[ "$3" == "1" ] && {
+				echo "try to resolve ip conflict automatically" >/dev/console
+				#echo "try to resolve ip conflict automatically" >/tmp/lhch.txt
+				local num=`echo "$lan_ip" | cut -d "." -f 1`
+				if [ $num != 172 ]; then
+					uci -q set network.$NET.ipaddr=172.22.$ADDR_OFFSET.1
+					uci -q set network.$NET.netmask=255.255.255.0
+					new_ip=172.22.$ADDR_OFFSET.1
+				else
+					uci -q set network.$NET.ipaddr=192.168.$ADDR_OFFSET.1
+					uci -q set network.$NET.netmask=255.255.255.0
+					new_ip=192.168.$ADDR_OFFSET.1
+				fi
+				uci commit network
+
+				uci -q delete firewall.dmzudp
+				uci -q delete firewall.dmz
+				uci commit firewall
+
+				echo "$NET ip will change to $new_ip and restart network" >/dev/console
+				NEED_RESTART=1
+			}
+		}
+	fi
+}
+
+check $@
+
+if [ "$(uci -q get system.@system[0].apmode_init)" == "1" ]; then
+	[ $NEED_RESTART -eq 1 ] && {
+		if [ "$(uci -q get ipv6.config.enabled)" = "1" -a "$(uci -q get ipv6.config.mode)" = "relay" ];then
+			/usr/sbin/ipv6_passthrough.sh restart &
+		else
+			/etc/init.d/network restart &
+		fi
+		rm /tmp/.apmode_ipinfo.txt -rf
+	}
+else
+	[ $NEED_RESTART -eq 1 ] && {
+		sleep 15
+		/etc/init.d/dnsmasq reload
+		sleep 10
+		if [ "$(uci -q get ipv6.config.enabled)" = "1" -a "$(uci -q get ipv6.config.mode)" = "relay" ];then
+			/usr/sbin/ipv6_passthrough.sh restart
+		else
+			/etc/init.d/network restart
+		fi
+
+		if [ "$(uci -q get system.@system[0].apmode_init)" == "0" -a "$(uci -q get system.@system[0].re_init)" == "0" ]; then
+			lanipaddr=$(uci -q get network.lan.ipaddr)
+			[ -n "$lanipaddr" ] && echo "$lanipaddr" > /sys/kernel/debug/ecm/ecm_db/lan_info
+		fi
+		rm /tmp/.apmode_ipinfo.txt -rf
+	}
+fi

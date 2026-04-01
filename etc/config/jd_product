@@ -1,0 +1,35 @@
+
+config product 'product'
+	option name 'JDC02_0001'
+	option rom 'JDC02'
+
+config upgrade 'upgrade'
+        option version '0.0.4.r1004'
+        option md5 '00000000000000000000000000000000'
+        option file_size '0'         
+        option type 'JDC02'
+        option url 'http://'
+	option upgrade_mask '0'
+
+config hwnat 'hwnat'
+	option enabled '1'
+
+config nat 'nat'
+	option enabled '0'
+	
+config wanmode 'wanmode'
+	option mode 'router'
+
+config jdsamba 'jdsamba'
+	option enable '0'
+
+config internet 'accesscontrol'
+	option mode 'deny'
+
+config iptv 'iptv_info'
+        option enable '0'
+        option mode '0'
+        option vid '99'
+        option priority '0'
+        option port '1'
+

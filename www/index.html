@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=no" />
+    <meta name="apple-mobile-web-app-title" content="京东路由" />
+    <meta http-equiv="pragma" content="no-cache">
+    <meta http-equiv="cache-control" content="no-cache">
+    <meta http-equiv="expires" content="0">
+    <title></title>
+    <link href="./P_IMG/icon.png" rel="icon" type="image/x-icon" />
+    <script type="text/javascript" src="./Public_JS/jquery.min.js"></script>
+    <script type="text/javascript" src="./Public_JS/redirect.js"></script>
+    <script type="text/javascript" src="./Public_JS/jquery.cookie.js"></script>
+    <script type="text/javascript" src="./Public_JS/page_title.js"></script>
+</head>
+
+<body>
+    <div id="main"></div>
+</body>
+<script type="module">
+    var errNo = 0;
+    $(function () {
+        var DEFAULT_VERSION = 9.0;
+        var ua = navigator.userAgent.toLowerCase();
+        var isIE = ua.indexOf("msie") > -1;
+        var safariVersion;
+        if (isIE) {
+            safariVersion = ua.match(/msie ([\d.]+)/)[1];
+        }
+        if (safariVersion <= DEFAULT_VERSION) {
+            alert('系统检测到您正在使用ie9及以下内核的浏览器，不能实现完美体验，请更换或升级浏览器访问！')
+        };
+
+        var htmlHref = window.location.href;
+        htmlHref = htmlHref.replace(/^http:\/\//, "");
+        var index = htmlHref.indexOf('/');
+        htmlHref = htmlHref.substring(0, index);
+        $.cookie("HostAddrIP", htmlHref, {
+            expires: 7, path: '/'
+        });
+        $.ajax({
+            type: "post",
+            url: "http://" + htmlHref + "/jdcapi",
+            data: JSON.stringify({
+                "jsonrpc": "2.0",
+                "id": 20,
+                "method": "call",
+                "params": [
+                    "00000000000000000000000000000000",
+                    "jdcapi.static",
+                    "get_initialization_info",
+                    {}
+                ]
+            }),
+            dataType: "json",
+            success: function (data) {
+                if (data.result[0] == 0 && data.result[1].intialized == '1') {
+                    if (browserRedirect()) {
+                        window.location.href = "./M_Guide/M_Login.html";
+                    } else {
+                        window.location.href = "./P_Guide/P_Login.html";
+                    }
+                } else {
+                    initUserLogin(htmlHref);
+                    if (errNo) {
+                        if (browserRedirect()) {
+                            window.location.href = "./M_Guide/M_Welcome.html";
+                        } else {
+                            window.location.href = "./P_Guide/P_Welcome.html";
+                        }
+                    } else {
+                        alert('系统错误，请重试');
+                    }
+                }
+            }
+        });
+
+    });
+    var initUserLogin = function (htmlHref) {
+        $.ajax({
+            type: "post",
+            url: "http://" + htmlHref + "/jdcapi",
+            async: false,
+            data: JSON.stringify({
+                "jsonrpc": "2.0",
+                "id": 1,
+                "method": "call",
+                "params": [
+                    "00000000000000000000000000000000",
+                    "session",
+                    "login",
+                    {
+                        "username": "root",
+                        "password": "admin",
+                        "timeout": 0
+                    }
+                ]
+            }),
+            dataType: "json",
+            success: function (data) {
+                if (data.result[0] == 0) {
+                    errNo = 1;
+                    $.cookie("sessionid", data.result[1].ubus_rpc_session, {
+                        expires: 7, path: '/'
+                    });
+                } else {
+                    errNo = 0;
+                }
+            }
+        });
+    };
+</script>
+
+</html>

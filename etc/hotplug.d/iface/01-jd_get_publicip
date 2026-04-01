@@ -1,0 +1,13 @@
+#!/bin/sh
+
+[ "$ACTION" = ifup -o "$ACTION" = ifupdate ] || exit 0
+
+if [ "$(uci -q get network.lan.proto)" = "dhcp" ]; then
+	if [ "$INTERFACE" = "lan" ]; then
+		jd_get_publicip.sh &
+	fi
+else
+	if [ "$INTERFACE" = "wan" ]; then
+		jd_get_publicip.sh &
+	fi
+fi

@@ -1,0 +1,30 @@
+#!/bin/sh /etc/rc.common
+START=998
+USE_PROCD=1
+
+NAME='jdcbox'
+DIR='jdcbox'
+LAUNCHER='jdcbox.sh'
+MOUNTED='/etc'
+CMD=$MOUNTED/$DIR/$LAUNCHER
+
+start_service() {
+    echo "$NAME procd start"
+    procd_open_instance $NAME
+    procd_set_param command $CMD
+    procd_append_param command
+    procd_set_param env MOUNTED=$MOUNTED
+    procd_set_param limits nofile="16384 16384"
+    procd_set_param respawn 300 10 999999
+    procd_set_param stdout 1
+    procd_set_param stderr 1
+    procd_close_instance
+}
+
+stop_service() {
+    echo "$NAME procd stop"
+    service_stop $CMD
+    killall $NAME >/dev/null 2>&1
+    killall $TARGET >/dev/null 2>&1
+}
+

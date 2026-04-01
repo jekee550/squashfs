@@ -1,0 +1,3 @@
+/etc/init.d/autorole
+/usr/sbin/autorole-run.sh
+/etc/config/autorole

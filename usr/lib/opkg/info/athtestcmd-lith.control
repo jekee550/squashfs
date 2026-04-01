@@ -1,0 +1,8 @@
+Package: athtestcmd-lith
+Version: local0.0.1-1
+Depends: libc, libssp
+Source: qca/feeds/athtestcmd/athtestcmd
+Section: QCA
+Architecture: ipq
+Installed-Size: 71816
+Description:  qcatestcmd command support for lithium

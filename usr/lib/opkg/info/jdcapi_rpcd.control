@@ -1,0 +1,8 @@
+Package: jdcapi_rpcd
+Version: 1
+Depends: libc, libssp, libubox, libubus, libopenssl, libcurl, libpthread, libjson-c, libblobmsg-json, libjdc_uci, libjdc_utilities, libjdc_ezmesh
+Source: feeds/jdcloud_packages/service/jdcapi_rpcd
+Section: opt
+Architecture: ipq
+Installed-Size: 298239
+Description:  Provides the NRPC jdcapi API.

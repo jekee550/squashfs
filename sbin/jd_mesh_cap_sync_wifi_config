@@ -1,0 +1,12 @@
+#!/bin/sh
+
+cap_mode=`uci -q get system.@system[0].cap_init`
+
+if [ $cap_mode -eq 1 ]
+then
+{
+[ -f /usr/sbin/mesh5g2sync.sh ] && /usr/sbin/mesh5g2sync.sh start &
+/etc/init.d/wsplcd restart_after_config_change
+sleep 5
+}
+fi

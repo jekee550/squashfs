@@ -1,0 +1,9 @@
+Package: memtester
+Version: 4.3.0-1
+Depends: libc, libssp
+Source: package/utils/memtester
+Section: utils
+Maintainer: GuoWei Lim <limguowei@gmail.com>
+Architecture: ipq
+Installed-Size: 7181
+Description:  A userspace utility for testing the memory subsystem for faults.

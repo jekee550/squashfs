@@ -1,0 +1,5 @@
+/usr/sbin/odhcpd
+/etc/init.d/odhcpd
+/etc/uci-defaults/odhcpd.defaults
+/etc/hotplug.d/iface/26-odhcpd
+/usr/sbin/odhcpd-update

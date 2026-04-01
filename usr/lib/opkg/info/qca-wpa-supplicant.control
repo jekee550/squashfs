@@ -1,0 +1,9 @@
+Package: qca-wpa-supplicant
+Version: local0.0.1-1
+Depends: libc, libssp, libopenssl, libnl
+Source: qca/feeds/qca/net/qca-hostap
+Section: QCA
+Maintainer: Qualcomm Atheros
+Architecture: ipq
+Installed-Size: 861209
+Description:  WPA Supplicant

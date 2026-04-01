@@ -1,0 +1,26 @@
+#!/bin/sh
+# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2010 Vertical Communications
+
+do_mount_root() {
+	echo "Before check rootfs"
+	. /lib/functions.sh
+	plugin_rootfs=$(find_mmc_part "rootfs_data" 2> /dev/null)
+	e2fsck -y $plugin_rootfs
+	[ $? -eq 8 ] && {
+		echo "rootfs_data check failed, need format!!!"
+		mkfs.ext4 $plugin_rootfs
+	}
+	echo "After check rootfs"
+	echo "Before mount_root"
+	mount_root
+	boot_run_hook preinit_mount_root
+	[ -f /sysupgrade.tgz ] && {
+		echo "- config restore -"
+		cd /
+		tar xzf /sysupgrade.tgz
+	}
+	echo "After mount_root"
+}
+
+[ "$INITRAMFS" = "1" ] || boot_hook_add preinit_main do_mount_root

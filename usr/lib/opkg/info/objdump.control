@@ -1,0 +1,10 @@
+Package: objdump
+Version: 2.24-3
+Depends: libc, libssp, libopcodes
+Source: package/devel/binutils
+License: GPL-3.0+
+Section: devel
+Maintainer: Felix Fietkau <nbd@openwrt.org>
+Architecture: ipq
+Installed-Size: 125370
+Description:  objdump

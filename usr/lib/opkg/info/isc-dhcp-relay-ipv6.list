@@ -1,0 +1,4 @@
+/etc/init.d/dhcrelay4
+/etc/init.d/dhcrelay6
+/etc/config/dhcrelay
+/usr/sbin/dhcrelay

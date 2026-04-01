@@ -1,0 +1,8 @@
+Package: kmod-qca-nss-drv-l2tpv2
+Version: 4.4.60+local0.0.1-2
+Depends: kernel (=4.4.60-1-3ee98c57b1216d17ff25499ba71cfacb), kmod-qca-nss-drv, kmod-ppp, kmod-l2tp
+Source: qca/feeds/nss-host/qca-nss-clients
+Section: kernel
+Architecture: ipq
+Installed-Size: 9915
+Description:  Kernel driver for NSS (connection manager) - l2tp

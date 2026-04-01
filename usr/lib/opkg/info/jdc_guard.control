@@ -1,0 +1,8 @@
+Package: jdc_guard
+Version: 2
+Depends: libc, libssp, libopenssl, libcurl, libjson-c, libuci, libpthread, libericstools, libnl-tiny, libubus, libblobmsg-json, libubus_ht, libubox, libgcloud_comm, libjdc_uci, libjdc_utilities
+Source: feeds/jdcloud_packages/service/jdc_guard
+Section: opt
+Architecture: ipq
+Installed-Size: 30608
+Description:  jdcloud guard daemon

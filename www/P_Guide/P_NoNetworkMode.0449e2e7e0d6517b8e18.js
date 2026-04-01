@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkdemo_309=self.webpackChunkdemo_309||[]).push([[4912],{561:e=>{e.exports=window.jQuery},4410:(e,t,o)=>{!function(e){e("#mode-retest").on("click",function(){e(location).attr("href","./P_CheckInter.html")}),e("#mode-manualConfig").on("click",function(){e(location).attr("href","./P_SelectNetworkType.html")})}(o(561))}},e=>{e(e.s=4410)}]);

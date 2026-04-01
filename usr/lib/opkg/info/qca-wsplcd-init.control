@@ -1,0 +1,9 @@
+Package: qca-wsplcd-init
+Version: local0.0.1-1
+Depends: libc, libssp, qca-ieee1905-init, libhyficommon, libstorage, libwpa2, libieee1905, libuci, libpthread, libwifisoncfg, qca-son-mem-debug
+Source: qca/feeds/ieee1905-security/qca-ieee1905-security-config/qca-wsplcd
+Section: QCA
+Maintainer: Qualcomm Atheros, Inc.
+Architecture: ipq
+Installed-Size: 15965
+Description:  This package installs the IEEE 1905.1 AP Auto-Configuration daemon init package files for SON and MAP execution

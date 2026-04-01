@@ -1,0 +1,11 @@
+config jdc_ezmesh 'ezmesh'
+	option enable '0'
+	#easymesh controller or agent,only seted when web wizard
+	option role 'agent'
+	option backhaulssid ''
+	option backhaulkey ''
+	option user_turns_on_led '1'
+	option 1905debug '0'
+	#DUMP,DEBUG,INFO,ERROR
+	option 1905debug_level 'ERROR'
+	option version '1'

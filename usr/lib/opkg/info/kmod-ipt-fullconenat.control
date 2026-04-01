@@ -1,0 +1,11 @@
+Package: kmod-ipt-fullconenat
+Version: 4.4.60+2018-12-15-d4daedd0-1
+Depends: kernel (=4.4.60-1-3ee98c57b1216d17ff25499ba71cfacb), kmod-nf-ipt, kmod-nf-nat
+Source: feeds/jdcloud_packages/service/openwrt-fullconenat
+License: GPL-2.0
+LicenseFiles: LICENSE
+Section: kernel
+Maintainer: Chion Tang <tech@chionlab.moe>
+Architecture: ipq
+Installed-Size: 5921
+Description:  FULLCONENAT netfilter module

@@ -1,0 +1,188 @@
+@media screen and (min-width: 320px) and (max-width: 560px) {
+    .onlieGuideBox_title {
+        height: 60px;
+        line-height: 60px;
+        font-size: 22px;
+        background: #FFFFFF;
+        box-shadow: 0px 4px 4px rgba(71, 98, 254, 0.1);
+        padding: 0 15px;
+        border-bottom: none;
+    }
+    .M_returnImg {
+        display: block;
+    }
+    .onlieGuideBox_content {
+        margin-top: 60px;
+        border-radius: 10px;
+        padding: 10px;
+    }
+    .onlieGuideBox_content_top {
+        font-size: 13px;
+        height: 40px;
+        line-height: 40px;
+    }
+    .onlieGuideBox_content_top img {
+        width: 18px;
+        margin-top: -3px;
+    }
+    .onlieGuideBox_content_text {
+        font-size: 12px;
+        padding: 18px 0;
+    }
+    .onlieGuideBox_content_btn {
+        font-size: 12px;
+        height: 38px;
+    }
+    .onlieGuideBox_content_select {
+        padding: 14px 0;
+    }
+    .onlieGuideBox_content_input {
+        padding: 20px 20px;
+    }
+    /*网线问题模块*/
+    .guide_line_detc_width {
+        width: 330px;
+    }
+    /*上网模式模块*/
+    .guide_inter_mode_width {
+        width: 370px;
+    }
+    /*上网类型选择模块*/
+    .guide_inter_type_width {
+        width: 330px;
+    }
+    .onlieGuideBox_content_type_select {
+        margin-bottom: 20px;
+    }
+    .internet_type_select {
+        height: 48px;
+        line-height: 48px
+    }
+    .internet_type_select_name {
+        width: 28%;
+        font-size: 12px;
+    }
+    .tinternet_type_select_content p {
+        font-size: 10px;
+    }
+    .tinternet_type_select_content p:nth-of-type(1) {
+        width: 88%;
+    }
+    .tinternet_type_select_content p:nth-of-type(2) {
+        width: 10%;
+    }
+    .tinternet_type_select_content {
+        width: 70%;
+    }
+    /*输入运营商账号密码*/
+    .onlieGuideBox_content_btn_user {
+        padding: 0 20px;
+    }
+    .onlieGuideBox_content_inputBig {
+        height: 40px;
+        font-size: 12px;
+        padding-left: 10px;
+    }
+    /*设置管理密码部分*/
+    .setAdminPwd_Btn {
+        margin-bottom: 20px;
+    }
+    /*配置完成部分*/
+    .onlieGuideBox_config_title {
+        height: 145px;
+        border: none;
+    }
+    .onlieGuideBox_title_marginTop60 {
+        padding-top: 34px!important;
+    }
+    .onlieGuideBox_title_marginTop60>img {
+        width: 30px;
+        margin-top: -82px;
+    }
+    .onlieGuideBox_title_marginTop60>span {
+        width: 300px;
+    }
+    .guide_config_successfully {
+        width: 320px;
+        margin-top: 0px!important;
+        padding: 10px 10px!important;
+    }
+    .onlieGuideBox_bigTitle {
+        font-size: 20px;
+        line-height: 44px;
+        padding-left: 20px;
+    }
+    .onlieGuideBox_Title_p {
+        font-size: 12px;
+        line-height: 14px;
+        margin: 0!important;
+    }
+    .guide_config_content_div {
+        width: 100%!important;
+        padding: 20px 0 20px 65px;
+    }
+    .guide_config_content_right {
+        display: none;
+    }
+    .guide_config_info_label {
+        width: 98px;
+        margin-right: 18px;
+        font-size: 12px;
+        position: absolute;
+        top: 5px;
+        left: 14px;
+    }
+    .guide_config_info_input {
+        width: 165px;
+        font-size: 12px;
+        padding: 8px;
+        margin-left: 120px;
+    }
+    .guide_config_info {
+        position: relative;
+    }
+    /*wifi中继向导页面*/
+    .guide_wifi_relay_div {
+        height: 40px;
+        font-size: 12px;
+    }
+    .guide_wifi_relay_div_name {
+        line-height: 40px;
+        padding-left: 10px;
+        width: 90%!important;
+    }
+    .guide_wifi_relay_div_img {
+        line-height: 40px;
+        width: 9%!important;
+        left: 91%!important;
+    }
+    .guide_wifi_relay_div_ul {
+        top: 39px;
+    }
+    .guide_wifi_relay_div_ul>ul {
+        padding: 0 20px;
+        max-height: 224px;
+        overflow: auto;
+    }
+    .guide_wifi_relay_div_ul>ul>li {
+        height: 40px;
+        line-height: 40px;
+    }
+    .guide_wifi_relay_div_ul>ul>li>img {
+        top: 8px;
+    }
+    .switch_smart_div {
+        display: none;
+    }
+    .dns_select {
+        margin-top: 3px;
+    }
+    .dns_select::before{
+        top: 24px;
+        right: 16px;
+    }
+    .dns_select::after{
+        top: 22px;
+        right: 15px;
+    }
+}

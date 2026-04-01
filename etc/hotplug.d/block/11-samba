@@ -1,0 +1,195 @@
+
+. /lib/ipq806x.sh
+. /lib/functions/pcdn_common.sh
+
+board=$(ipq806x_board_name)
+
+[ "$ACTION" = "add" ] && {
+	[ "$DEVTYPE" = "partition" -o "$DEVTYPE" = "disk" ] && {
+		[ "${DEVNAME:0:2}" = "sd" ] && {
+			#[ "$(mount | grep $DEVNAME | cut -d ' ' -f1 | tr -d '\n')" = "/dev/$DEVNAME" ] && {
+			#[ "$DEVTYPE" = "partition" ] && {
+				while [ -z "$(cat /proc/mounts | grep overlayfs)" ];do
+					sleep 1
+				done
+
+				#如果disk有分区，则过滤disk的挂载检查
+				#[ "$DEVTYPE" = "disk" ] && {
+				#	sleep 1
+				#	ls /dev/${DEVNAME}[1-9] && exit 1
+				#}
+
+				unsupport=0
+				#如果block info结果为空，则未格式化,挂载不会成功
+				[ -z "$(/sbin/block info | grep -w $DEVNAME)" ] && unsupport=1
+				#[ -z "$(blkid | grep -w $DEVNAME)" ] && exit 1
+				#blkid /dev/$DEVNAME
+				#[ "$(echo $?)" != 0 ] && exit 1
+
+				loop_n=0
+				while [ $loop_n -lt 20 ];do
+					if [ -n "$(cat /proc/mounts | grep "/mnt/$DEVNAME")" -o "$unsupport" = "1" ];then
+						break
+					fi
+					sleep 3
+					loop_n=$(( $loop_n + 1 ))
+				done
+
+				if [ $loop_n -ge 20 ];then
+					if [ -n "$(ls /dev/$DEVNAME 2>/dev/null)" ];then
+						[ -z "$(cat /proc/mounts | grep "/mnt/$DEVNAME")" ] && unsupport=1
+					else
+						logger samba: /dev/$DEVNAME is not exist!!!
+						exit 1
+					fi
+				fi
+
+				#[ "${DEVNAME:0:6}" = "mmcblk" ] && exit 0
+
+				logger samba: $ACTION $DEVNAME $DEVTYPE
+				#mkdir -p /mnt/$DEVNAME
+				uci delete samba.$DEVNAME
+				if [ "$unsupport" = "1" ];then
+					section=`/sbin/uci add samba unsupport`
+				else
+					mkdir -p /mnt/$DEVNAME
+					section=`/sbin/uci add samba sambashare`
+				fi
+				/sbin/uci rename samba.$section=$DEVNAME
+				/sbin/uci set samba.$DEVNAME.name=$DEVNAME
+				/sbin/uci set samba.$DEVNAME.path=/mnt/$DEVNAME
+				/sbin/uci set samba.$DEVNAME.part_size=$(df | grep /dev/$DEVNAME | awk '{print $2}')
+				/sbin/uci set samba.$DEVNAME.type=$(cat /proc/mounts | grep /dev/$DEVNAME | awk '{print $3}')
+				/sbin/uci set samba.$DEVNAME.read_only=no
+				/sbin/uci set samba.$DEVNAME.guest_ok=yes
+				/sbin/uci set samba.$DEVNAME.create_mask=777
+				/sbin/uci set samba.$DEVNAME.dir_mask=777
+				dev=`echo $DEVNAME | tr -d "1-9"`
+				/sbin/uci set samba.$DEVNAME.dev=$dev
+				/sbin/uci set samba.$DEVNAME.part=$DEVNAME
+				[ "$unsupport" = "1" ] && {
+					/sbin/uci commit samba.$DEVNAME
+					exit 1
+				}
+
+				[ "$dev" != "$DEVNAME" ] && {
+					uci delete samba.$dev
+					uci commit samba.$dev
+				}
+
+				if [ -e /mnt/$DEVNAME/.jdc_disk_mode ];then
+					disk_mode=`cat /mnt/$DEVNAME/.jdc_disk_mode | tr -d '\n'`
+				fi
+				#elif [ "$(blkid /dev/$DEVNAME | awk -F "\"" '{print $4}')" = "ext4" ];then
+				#	disk_mode='pcdn'
+				#	echo $disk_mode > /mnt/$DEVNAME/.jdc_disk_mode
+				if [ -z "$disk_mode" ] || [ "$disk_mode" != "pcdn" -a "$disk_mode" != "samba" ];then
+					disk_mode='samba'
+					echo $disk_mode > /mnt/$DEVNAME/.jdc_disk_mode
+				fi
+
+				#修复离线下载导致的opt空间占满
+				#[ -L /opt/downloader/$DEVNAME ] && rm -f /opt/downloader/$DEVNAME
+				[ -n "$(ls -l /opt/downloader/$DEVNAME | grep ^d)" ] && rm -rf /opt/downloader/$DEVNAME
+
+				#删除重复创建的软链接
+				[ -L /mnt/$DEVNAME/$DEVNAME ] && rm -f /mnt/$DEVNAME/$DEVNAME
+				if [ "$disk_mode" = "samba" ];then
+					#add webdav folder
+					[ -d /www/webdav ] && {
+						rm -f /www/webdav/$DEVNAME
+						#磁盘内软连到系统目录(非/mnt)
+						[ -z "$(ls -lR /mnt/$DEVNAME 2>/dev/null | grep ^l | awk -F "-> " '{print $2}' | grep ^/ | grep -v /mnt/sd)" -a -z "$(ls -lR /mnt/$DEVNAME 2>/dev/null | grep ^l | awk -F "-> " '{print $2}' | grep [.][.]/)" ] && ln -s /mnt/$DEVNAME/ /www/webdav/$DEVNAME
+					}
+					if [ -f /etc/init.d/downloader ];then
+						/etc/init.d/downloader restart &
+					fi
+				fi
+
+				/sbin/uci set samba.$DEVNAME.mode=$disk_mode
+				/sbin/uci commit samba
+				chmod 777 /mnt/$DEVNAME
+				chmod 644 /mnt/$DEVNAME/.jdc_disk_mode
+
+				touch /tmp/smb.flag
+				#smp.sh storage
+
+				/etc/init.d/samba restart
+				[ "$disk_mode" = "pcdn" -a -e /tmp/.bootdone ] && {
+					jdcpcdn_check_start $DEVNAME start
+				}
+				#run transmission
+				if [ -f /etc/init.d/transmission -a -z "$(pidof transmission-daemon)" ];then
+					/sbin/uci set transmission.@transmission[0].enabled=1
+					/sbin/uci set transmission.@transmission[0].download_dir=/mnt/$DEVNAME/.tr-download
+					/sbin/uci set transmission.@transmission[0].watch_dir=/mnt/$DEVNAME/.tr-torrent
+					/sbin/uci set transmission.@transmission[0].config_dir=/mnt/$DEVNAME/.tr-config
+					/sbin/uci set transmission.@transmission[0].watch_dir_enabled=true
+					/sbin/uci commit transmission
+					/etc/init.d/transmission restart &
+				else
+					rm -rf /mnt/$DEVNAME/.tr-download
+					rm -rf /mnt/$DEVNAME/.tr-torrent
+					rm -rf /mnt/$DEVNAME/.tr-config
+				fi
+			#}
+		}
+	}
+}
+
+[ "$ACTION" = "remove" ] && {
+	[ "$DEVTYPE" = "partition" -o "$DEVTYPE" = "disk" ] && {
+		[ "${DEVNAME:0:2}" = "sd" ] && {
+			#[ "$DEVTYPE" = "partition" ] && {
+				logger samba: remove $DEVNAME $DEVTYPE
+				#stop transmission
+				[ -n "$(pidof transmission-daemon)" -a -n "$(/sbin/uci -q get transmission.@transmission[0].download_dir | grep "/mnt/$DEVNAME")" ] && {
+					/etc/init.d/transmission stop &
+					/sbin/uci set transmission.@transmission[0].enabled=0
+					/sbin/uci commit transmission
+				}
+
+				jdcpcdn_check_start $DEVNAME stop
+				rm -rf /overlay/upper/mnt/$DEVNAME
+
+				[ -L /www/webdav/$DEVNAME ] && {
+					#stop webdav
+					/etc/init.d/webdav stop
+					#delete webdav folder
+					rm -f /www/webdav/$DEVNAME
+					#start webdav
+					/etc/init.d/webdav start
+				}
+				#sleep 1
+				#jdcpcdn_check_start $DEVNAME start
+
+			#}
+
+			[ `/sbin/uci get samba.$DEVNAME.name` = "" ] && break
+			[ `/sbin/uci get samba.$DEVNAME.name` = "$DEVNAME" ] && {
+				/sbin/uci delete samba.$DEVNAME
+				/sbin/uci commit samba
+				rmdir /mnt/$DEVNAME
+				if [ -f /etc/init.d/downloader -a -n "$(pidof downloader)" ];then
+					#修复离线下载导致的opt空间占满
+					/etc/init.d/downloader stop
+					#[ -L /opt/downloader/$DEVNAME ] && rm -f /opt/downloader/$DEVNAME
+					[ -n "$(ls -l /opt/downloader/$DEVNAME | grep ^d)" ] && rm -rf /opt/downloader/$DEVNAME
+					rm -rf /overlay/upper/mnt/$DEVNAME
+					/etc/init.d/downloader restart &
+				fi
+			}
+			jdcpcdn_check_start $DEVNAME start
+			ret=$(/sbin/uci get samba.@sambashare[0] 2>&1 | awk '{print $3}' | tr -d '\n')
+			[ $ret = "not" ] && {
+				/etc/init.d/samba stop
+				rm -f /tmp/smb.flag
+			}
+			[ $ret = "not" ] || {
+				/etc/init.d/samba restart	
+			}
+		}
+	}
+}
+
+

@@ -1,0 +1,55 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2013-2014 OpenWrt.org
+
+START=00
+
+boot() {
+	#configure led
+	uci -q set system.led_power.default=1
+	uci -q set system.led_network.default=0
+	uci -q set system.led_plugin.default=0
+	#uci commit system
+	[ "`uci -q get system.led_switch.enable`" == "0" ] &&  /etc/init.d/led stop
+	#重置联网标志
+	uci set jd_product.network.connected='0'
+	#uci commit jd_product
+	[ -n "$(cat /etc/firewall.user | grep '\-A zone_wan_prerouting')" ] && cp -f /rom/etc/firewall.user /etc/firewall.user
+	#delete mount folder
+	rmdir /opt 2>/dev/null
+	rmdir /mnt/* 2>/dev/null
+	rm -f /etc/config/.*.uci-* 2>/dev/null
+	cp -f /rom/etc/config/samba /etc/config/samba
+	#delete webdav soft symbol
+	rm -f /www/webdav/*
+	#根据usb3.0开关标记加载ko
+	usb3_dis="$(uci -q get system.@system[0].usb3_disable)"
+	[ -z "$usb3_dis" ] && usb3_dis='1'
+	insmod /lib/modules/4.4.60/xhci-hcd.ko usb3_disable="$usb3_dis"
+	insmod /lib/modules/4.4.60/xhci-pci.ko
+	insmod /lib/modules/4.4.60/xhci-plat-hcd.ko
+	#create plugin group folder
+	mkdir /sys/fs/cgroup/plugin
+	echo 0 > /sys/fs/cgroup/plugin/cpuset.mems
+	echo 2-3 > /sys/fs/cgroup/plugin/cpuset.cpus
+	#echo 40000 > /sys/fs/cgroup/plugin/cpu.cfs_quota_us
+	#echo 50000 > /sys/fs/cgroup/plugin/cpu.cfs_period_us
+	#create docker group folder
+	mkdir -p /sys/fs/cgroup/docker
+	echo 0 > /sys/fs/cgroup/docker/cpuset.mems
+	echo 2-3 > /sys/fs/cgroup/docker/cpuset.cpus
+	#echo 40000 > /sys/fs/cgroup/docker/cpu.cfs_quota_us
+	#echo 50000 > /sys/fs/cgroup/docker/cpu.cfs_period_us
+	#禁用oom-killer
+	echo 1 > /sys/fs/cgroup/plugin/memory.oom_control
+	echo 1 > /sys/fs/cgroup/docker/memory.oom_control
+	#use_hierarchy
+	echo 1 > /sys/fs/cgroup/plugin/memory.use_hierarchy
+	echo 1 > /sys/fs/cgroup/docker/memory.use_hierarchy
+	#migration
+	echo 1 > /sys/fs/cgroup/plugin/memory.move_charge_at_immigrate
+	echo 1 > /sys/fs/cgroup/docker/memory.move_charge_at_immigrate
+	local curtime="$(date +%s)"
+	local maxtime="$(find /etc -type f -exec date -r {} +%s \; | sort -nr | head -n1)"
+	[ $curtime -lt $maxtime ] && date -s @$maxtime
+}
+

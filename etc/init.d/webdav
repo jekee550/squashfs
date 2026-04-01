@@ -1,0 +1,69 @@
+#!/bin/sh /etc/rc.common
+. /lib/functions/pcdn_common.sh
+
+START=996
+USE_PROCD=1
+EXTRA_COMMANDS="${EXTRA_COMMANDS} is_running status"
+
+NAME='webdav'
+WORKDIR='/www/webdav'
+CMD=/usr/bin/$NAME
+
+
+
+start_service() {
+	haiapi call '{"version":"1.0.0","action":"call","need_save":"1","payload":[{"method":"firewall.set_port_access","data":{"dest_port":56590,"proto":"tcp"}}]}' >/dev/null 2>&1
+	procd_open_instance
+	procd_set_param command $CMD -t
+	procd_set_param respawn
+	procd_set_param user nobody
+	procd_set_param stdout 1
+	procd_set_param stderr 1
+	procd_close_instance
+
+	/etc/webdav.sh &
+
+	crontab -l | grep -v 'webdav.sh' | crontab -
+	(crontab -l ; echo "0 */1 * * * /etc/webdav.sh &") | crontab -
+}
+
+stop_service() {
+	kill -9 "$(pgrep $NAME)" >/dev/null 2>&1
+	ps | grep webdav.sh | grep -v grep | awk '{print $1}' | xargs kill -9 >/dev/null 2>&1
+	local mac=$(cat /sys/class/net/br-lan/address)
+	local mac1=${mac:0:2}${mac:3:2}${mac:6:2}${mac:9:2}${mac:12:2}${mac:15:2}
+	upnpc -e "wd$mac1" -d 56590 tcp >/dev/null 2>&1
+
+	crontab -l | grep -v 'webdav.sh' | crontab -
+}
+
+restart() {
+	stop
+	start
+}
+
+running() {
+	if pidof $NAME >/dev/null 2>&1; then
+		echo -n '1'
+	else
+		echo -n '0'
+	fi
+}
+
+is_running() {
+	if pidof $NAME >/dev/null 2>&1; then
+		echo -n '1'
+	else
+		echo -n '0'
+	fi
+}
+
+status() {
+	if [ -d "$WORKDIR" ]; then
+		USED=$(du "$WORKDIR" -d 0 | awk '{print $1}')
+	else
+		USED=0
+	fi
+	DATA='{"storage":{"used":'$USED'}}'
+	echo "$DATA"
+}

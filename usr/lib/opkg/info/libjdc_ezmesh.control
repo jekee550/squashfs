@@ -1,0 +1,8 @@
+Package: libjdc_ezmesh
+Version: 1.0.0
+Depends: libc, libssp, libpthread, librt, libjdc_uci, libnl-tiny, libpcap
+Source: feeds/jdcloud_packages/libs/libjdc_ezmesh
+Section: opt
+Architecture: ipq
+Installed-Size: 17341
+Description:  a common function for jdc_ezmesh APIs

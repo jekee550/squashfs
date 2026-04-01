@@ -1,0 +1,11 @@
+Package: libnetfilter-cttimeout
+Version: 1.0.0-1
+Depends: libc, libssp, libmnl
+Source: qca/feeds/packages/libs/libnetfilter-cttimeout
+License: GPL-2.0+
+LicenseFiles: COPYING
+Section: libs
+Maintainer: Nicolas Thill <nico@openwrt.org>
+Architecture: ipq
+Installed-Size: 4189
+Description:  API to connection tracking timeout infrastructure

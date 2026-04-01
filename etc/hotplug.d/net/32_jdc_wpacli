@@ -1,0 +1,39 @@
+#!/bin/sh
+#
+# Copyright (c) 2024 Jdc add by wangkun271
+#
+#
+case "$ACTION" in
+    add)
+        if echo "${INTERFACE}" | grep -q "^ath[0-2]5$"; then
+            echo "hotplug-net:ACTION=$ACTION  INTERFACE=$INTERFACE " > /dev/console
+            logger -t hotplug-net -p user.info "INTERFACE=$INTERFACE ACTION=$ACTION" 
+            wpa_cli -g /var/run/wpa_supplicantglobal -i ${INTERFACE} -a /usr/sbin/jdc_ezmesh_bksta_hotevent.sh &
+            wpa_cli_pid=$!
+            echo "$wpa_cli_pid" > /tmp/.jdc_wpa_cli_pid
+        fi
+        if echo "${INTERFACE}" | grep -q "^ath[0-2]6$" && [ "$(uci -q get system.@system[0].cap_init)" = "1" ] ; then
+            echo "hotplug-net:ACTION=$ACTION  INTERFACE=$INTERFACE " > /dev/console
+            logger -t hotplug-net -p user.info "INTERFACE=$INTERFACE ACTION=$ACTION"
+            #sleep 30 for Prevent events(EVENT-CHANNEL-SWITCH) during wireless restart process
+            sleep 30 && /usr/sbin/hostapd_cli -i ${INTERFACE} -p /var/run/hostapd-wifi${INTERFACE:3:1} -P /var/run/hostapd_cli-${INTERFACE}.pid -a /usr/sbin/jdc_ezmesh_hostapd_dfs_event.sh &
+            hostapd_cli_event_pid=$!
+            echo "$hostapd_cli_event_pid" > /tmp/.hostapd_cli_event_pid
+         fi
+    ;;
+    remove)
+        if echo "${INTERFACE}" | grep -q "^ath[0-2]5$" ; then
+            echo "hotplug-net:  ACTION=$ACTION  INTERFACE=$INTERFACE" > /dev/console
+            logger -t hotplug-net -p user.info "INTERFACE=$INTERFACE ACTION=$ACTION" 
+            kill -9 $(cat /tmp/.jdc_wpa_cli_pid)
+        fi
+        if echo "${INTERFACE}" | grep -q "^ath[0-2]6$" && [ "$(uci -q get system.@system[0].cap_init)" = "1" ]; then
+            echo "hotplug-net:  ACTION=$ACTION  INTERFACE=$INTERFACE" > /dev/console
+            logger -t hotplug-net -p user.info "INTERFACE=$INTERFACE ACTION=$ACTION" 
+            kill -9 $(cat /tmp/.hostapd_cli_event_pid)
+        fi
+    ;;
+esac
+
+exit 0
+

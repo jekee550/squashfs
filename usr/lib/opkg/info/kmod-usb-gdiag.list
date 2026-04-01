@@ -1,0 +1,2 @@
+/etc/modules.d/52-usb-gdiag
+/lib/modules/4.4.60/g_diag.ko

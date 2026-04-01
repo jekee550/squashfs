@@ -1,0 +1,190 @@
+#!/bin/sh /etc/rc.common
+
+USE_PROCD=1
+START=50 #after led and beafor wsplcd
+STOP=10
+
+PROG='/usr/sbin/jdc_ezmesh'
+EZMESH_CONF='/tmp/jdc_ezmesh.conf'
+
+PROCESS_MESHCMD="/usr/sbin/jdmesh_cmd"
+PROCESS_MESHMONITOR="/usr/sbin/jdc_ezmesh_monitor.sh"
+
+[ -n  "$(pgrep -f $PROCESS_MESHMONITOR)" ] && kill $(pgrep -f $PROCESS_MESHMONITOR)
+[ -n  "$(pgrep -f $PROCESS_MESHCMD)" ] && kill $(pgrep -f $PROCESS_MESHCMD)
+
+jdc_ezmesh_create_conf()
+{
+	local mesh_role="$1" #controller or agent
+	local base_ath24="" #2.4G for base ssid key
+	local base_ath52=""
+	local base_ath58=""
+	local freq_mode=0 #赵云是否开启三频模式
+	local is_apmode
+	local base64_fssid_24G
+	local base64_fssid_52G
+	local base64_fssid_58G
+	local base64_bkssid
+	local base64_fkey_24G
+	local base64_fkey_52G
+	local base64_fkey_58G
+	local base64_bkkey
+
+	if [ -e /lib/ipq806x.sh ];then 
+		g_product_model=$(. /lib/ipq806x.sh && echo $(ipq806x_product_name))
+	elif [ -e /lib/ramips.sh ];then
+		g_product_model=$(. /lib/ramips.sh && echo $(ramips_product_name))
+	else
+		g_product_model=$(. /lib/functions.sh && echo $(product_name))
+	fi
+
+	if [ -e /etc/config/wsplcd ];then
+		if [ `uci -q get jdc_ezmesh.ezmesh.1905debug` == "1" ];then
+			uci -q set wsplcd.config.WriteDebugLogToFile=APPEND
+		else
+			uci -q set wsplcd.config.WriteDebugLogToFile=NONE
+		fi
+		uci -q set wsplcd.config.DebugLevel=`uci -q get jdc_ezmesh.ezmesh.1905debug_level`
+		uci commit wsplcd
+	fi
+
+	if [ $mesh_role == "controller"  ];then
+		if [ $g_product_model = "RE-CS-06" ] ;then
+			base_24G="ath0"
+			base_52G="ath1"
+			base_58G="ath2"
+			freq_mode=$(uci -q get system.@system[0].freq_mode) 
+		elif [ $g_product_model = "RE-SS-02" ];then
+			base_24G="ath1"
+			base_52G="ath2"
+			base_58G="ath0"
+		else
+			base_24G="ath1"
+			base_52G="ath0"
+		fi
+
+		is_apmode=`uci -q get system.@system[0].apmode_init`
+		#fronthaulssid=`uci -q get wireless.$base_ath.ssid`
+		#fronthaul_encryption=`uci -q get wireless.$base_ath.encryption`
+		fronthaulssid_24G=`uci -q get wireless.$base_24G.ssid`
+		fronthaul_encryption_24G=`uci -q get wireless.$base_24G.encryption`
+		[ "$fronthaul_encryption_24G" != "none" ] && fronthaulkey_24G=`uci -q get wireless.$base_24G.key` || fronthaulkey_24G=""
+
+		fronthaulssid_52G=`uci -q get wireless.$base_52G.ssid`
+		fronthaul_encryption_52G=`uci -q get wireless.$base_52G.encryption`
+		[ "$fronthaul_encryption_52G" != "none" ] && fronthaulkey_52G=`uci -q get wireless.$base_52G.key` || fronthaulkey_52G=""
+
+		fronthaulssid_58G=`uci -q get wireless.$base_58G.ssid`
+		fronthaul_encryption_58G=`uci -q get wireless.$base_58G.encryption`
+		[ "$fronthaul_encryption_58G" != "none" ] && fronthaulkey_58G=`uci -q get wireless.$base_58G.key` || fronthaulkey_58G=""
+
+		backhaulssid="$(uci -q get jdc_ezmesh.ezmesh.backhaulssid)"
+		backhaulkey="$(uci -q get jdc_ezmesh.ezmesh.backhaulkey)"
+		if [  "$backhaulssid" == "" -a  "$backhaulkey" == "" ];then
+			#正常就走这里
+			macaddr=$(cat /sys/class/net/br-lan/address)
+			macaddr2=$(echo $macaddr | tr -d :)
+			backhaulssid="Mesh_BH_${macaddr2:6}_ssid"
+			backhaulkey="Mesh_BH_${macaddr2:6}_key"
+		fi
+		base64_fssid_24G=$(echo -n $fronthaulssid_24G | base64)
+		base64_fkey_24G=$(echo -n $fronthaulkey_24G | base64)
+
+		base64_fssid_52G=$(echo -n $fronthaulssid_52G | base64)
+		base64_fkey_52G=$(echo -n $fronthaulkey_52G | base64)
+		
+		base64_fssid_58G=$(echo -n $fronthaulssid_58G | base64)
+		base64_fkey_58G=$(echo -n $fronthaulkey_58G | base64)
+
+
+		base64_bkssid=$(echo -n $backhaulssid | base64)
+		base64_bkkey=$(echo -n $backhaulkey | base64)
+
+    echo "
+daemon 0
+devicemac $macaddr
+role $role
+initwaittime 5
+#LOG_ERR=3 LOG_WARNING=4 LOG_INFO=6 LOG_DEBUG=7
+debuglevel 7
+logfile /tmp/log/jdc_ezmesh.log
+#controller#
+backhaulssid $base64_bkssid
+backhaulkey $base64_bkkey
+fronthaulssid_24G $base64_fssid_24G
+fronthaulkey_24G $base64_fkey_24G
+fronthaulssid_52G $base64_fssid_52G
+fronthaulkey_52G $base64_fkey_52G
+fronthaulssid_58G $base64_fssid_58G
+fronthaulkey_58G $base64_fkey_58G
+#1: 3-radio; 0: 2-radio
+freqmode $freq_mode
+isapmode $is_apmode
+" > $EZMESH_CONF
+	else ###################################agent#####################################
+		if [ "$g_product_model" = "RE-CS-03" -o "$g_product_model" = "RE-CS-06" -o "$g_product_model" = "RE-OS-03U" ] ;then
+			lan_eth="eth1 eth0"
+		elif [ $g_product_model = "RE-SS-02" ];then
+			lan_eth="eth0 eth1 eth2 eth3 eth4"
+		elif [  $g_product_model =  "jdc-ss01" ];then
+			lan_eth="eth1 eth2 eth3 eth4"
+		else	
+			logger "jdc_ezmesh.init  here is other wxb device and so on"
+		fi
+		macaddr=$(cat /sys/class/net/br-lan/address)
+    echo "
+daemon 0
+devicemac $macaddr
+role $role
+initwaittime 5
+#LOG_ERR=3 LOG_WARNING=4 LOG_INFO=6 LOG_DEBUG=7
+debuglevel 7
+logfile /tmp/log/jdc_ezmesh.log
+#agent#
+agent_lan_eth $lan_eth
+" > $EZMESH_CONF
+
+	fi
+}
+
+
+
+start_service() {
+    config_load jdc_ezmesh
+    local enable   # 定义本地变量
+    local role
+    config_get enable ezmesh enable '0'  # 如果配置中没有定义这个参数名称则默认赋值0
+    if [ $enable -eq 0 ];then
+        $PROCESS_MESHMONITOR & #beacon oui scan start
+        exit 0
+    fi
+    if [ "$(uci -q get system.@system[0].mesh_status)" != "0" ];then
+        uci -q set system.@system[0].mesh_status=0
+        [ "$(uci -q get system.led_switch.enable)" != "1" -a  "$(uci -q get jdc_ezmesh.ezmesh.user_turns_on_led)" = "1" ] &&  uci set system.led_switch.enable=1
+        uci commit system
+    fi
+
+    if [[ ! -L "/usr/sbin/wsplcd"  || ! "/usr/sbin/wsplcd" -ef "/usr/sbin/wsplcd-map" ]]; then
+        [ -f /usr/sbin/wifimeshconfig ] && /usr/sbin/wifimeshconfig map
+    fi
+
+    uci set jdc_ezmesh.ezmesh.upgrading_updated='1' # for /usr/bin/jdc_ezmesh_wifison2ezmesh.sh
+    uci set jdc_ezmesh.ezmesh.manual_trigger_mesh='1' # for start /usr/sbin/jdc_ezmesh thread ledctl
+    uci commit jdc_ezmesh
+
+    if [ "$(uci -q get smartqos.qos.mode)" == "3" ];then
+        ubus  call jdcapi_app app_set_credit_mode '{"mode": "0", "maxValue": "10"}'
+    fi
+
+    config_get role ezmesh role 'agent'
+
+    jdc_ezmesh_create_conf $role
+    procd_open_instance
+    procd_set_param command $PROG -c $EZMESH_CONF
+    procd_set_param respawn 3600 5 0
+    procd_close_instance
+}
+
+stop_service() {
+    service_stop $PROG
+}

@@ -1,0 +1,31 @@
+#!/bin/sh /etc/rc.common
+
+START=90
+
+start() {
+	[ -x /usr/bin/jsonfilter ] || return 1;
+
+	[ ! -d "/www/conf/" ] && mkdir -p /www/conf
+
+	local platform='MTK'
+	if [ -e /lib/ipq806x.sh ];then
+		platform='Atheros'
+		product_name=`. /lib/ipq806x.sh && echo $(ipq806x_product_name)`
+	elif [ -e /lib/ramips.sh ];then
+		product_name=`. /lib/ramips.sh && echo $(ramips_product_name)`
+	else
+		product_name=`. /lib/functions.sh && echo $(product_name)`
+	fi
+	local rom_type=`factory_hm info |grep rom_type |awk -F '=' '{print $2}' |tr -d '\n'`
+	local sn_C=$(grep  "sn="  /tmp/.factory_info  | cut -c 7)
+
+	local model_name=$(jsonfilter -i /www/conf/product_platform.json -e "@.model")
+	if [ "$model_name" != "$product_name" ];then
+	    echo "{
+	    \"platform\": \"${platform}\",
+	    \"model\": \"${product_name}\",
+	    \"sn_C\": \"${sn_C}\",
+	    \"rom_type\": \"${rom_type}\"
+	    }" > /www/conf/product_platform.json
+	fi
+}

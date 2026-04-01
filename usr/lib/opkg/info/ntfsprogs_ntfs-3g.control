@@ -1,0 +1,11 @@
+Package: ntfsprogs_ntfs-3g
+Version: 2014.2.15-1-fuseint
+Depends: libc, libssp, ntfs-3g, libgcrypt, libuuid
+Source: qca/feeds/packages/utils/ntfs-3g
+License: GPL-2.0 LGPL-2.0
+LicenseFiles: COPYING COPYING.LIB
+Section: utils
+Maintainer: Bud <wrt_buddhay@gmx.net>
+Architecture: ipq
+Installed-Size: 209325
+Description:  ntfsprogs (ntfs-3g)

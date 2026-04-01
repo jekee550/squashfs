@@ -1,0 +1,9 @@
+Package: qca-ieee1905-init
+Version: 1
+Depends: libc, libssp
+Source: qca/feeds/ieee1905-security/qca-ieee1905-security-config/qca-ieee1905-init
+Section: QCA
+Maintainer: Qualcomm Atheros
+Architecture: ipq
+Installed-Size: 5159
+Description:  This Package contains the script helper files for the IEEE1905.1 init scripts

@@ -1,0 +1,10 @@
+Package: libericstools
+Version: 1.0.0-1
+Depends: libc, libssp
+Source: feeds/jdcloud_packages/libs/libericstools
+Section: opt
+Maintainer: Eric Bishop <eric@gargoyle-router.com>
+Architecture: ipq
+Installed-Size: 9523
+Description:  A bunch of routines/utilities written by Eric Bishop,
+ a library primarily used in Gargoyle Web Interface for OpenWrt

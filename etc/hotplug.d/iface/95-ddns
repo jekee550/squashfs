@@ -1,0 +1,13 @@
+#!/bin/sh
+case "$ACTION" in
+ifup)
+logger "ddns | hotplug ddns start $INTERFACE"
+/etc/init.d/ddns restart
+#/etc/init.d/ddns enabled && /usr/lib/ddns/dynamic_dns_updater.sh -n "$INTERFACE" -- start
+;;
+ifdown)
+logger "ddns | hotplug ddns stop $INTERFACE"
+/etc/init.d/ddns stop
+#/usr/lib/ddns/dynamic_dns_updater.sh -n "$INTERFACE" -- stop
+;;
+esac

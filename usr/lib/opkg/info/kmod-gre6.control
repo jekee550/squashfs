@@ -1,0 +1,10 @@
+Package: kmod-gre6
+Version: 4.4.60-1
+Depends: kernel (=4.4.60-1-3ee98c57b1216d17ff25499ba71cfacb), kmod-iptunnel, kmod-ip6-tunnel
+Source: package/kernel/linux
+License: GPLv2
+Section: kernel
+Status: unknown hold not-installed
+Architecture: ipq
+Installed-Size: 11497
+Description:  Generic Routing Encapsulation support over IPv6

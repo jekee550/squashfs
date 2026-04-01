@@ -1,0 +1,9 @@
+Package: qca-mad
+Version: local0.0.1-1
+Depends: libc, libssp, libieee1905, libnl, qca-cfg80211, libhyficommon, libpthread, jansson
+Source: qca/feeds/qca-mad/qca-mad
+Section: QCA
+Maintainer: Qualcomm Atheros
+Architecture: ipq
+Installed-Size: 45912
+Description:  This package installs the Mesh Application Daemon

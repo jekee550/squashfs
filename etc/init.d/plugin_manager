@@ -1,0 +1,37 @@
+#!/bin/sh /etc/rc.common
+
+START=98
+
+USE_PROCD=1
+PROSH=/etc/sys_mmonitor.sh
+PROG=/usr/sbin/aiec_manager
+dev_type=
+pre_prompt="sys_mmonitor |"
+
+start_service() {
+    logger "$pre_prompt start"
+
+    if [ -e /lib/ramips.sh ];then
+        #鲁班
+        dev_type=$(. /lib/ramips.sh && echo $(ramips_product_name))
+    fi
+
+    if [ -n "$dev_type" ];then
+        procd_open_instance
+        procd_set_param command "$PROSH"
+        procd_set_param respawn 3600 5 0
+        procd_close_instance
+    fi
+
+	procd_open_instance
+	procd_set_param command "$PROG"
+	procd_set_param respawn 3600 5 0
+	procd_close_instance
+}
+
+stop_service() {
+    logger "$pre_prompt stop"
+    ps | grep sys_mmonitor.sh | grep -v grep | awk '{print $1}' | xargs kill -9 > /dev/null 2>&1
+	service_stop $PROG
+}
+

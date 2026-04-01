@@ -1,0 +1,20 @@
+#!/bin/sh /etc/rc.common
+. /lib/functions.sh
+
+logger "BTN_1 button  ${ACTION}  $SEEN"
+echo "$BUTTON $ACTION for $SEEN seconds, start screen" >/dev/console
+
+
+if [ "${ACTION}" = "pressed" ];then
+    logger "BTN_1 tmp1628 pressed"
+    jd_tmp1628_button.sh &
+fi
+if [ "${ACTION}" = "released" -a "${SEEN}" -lt 3 ];then
+    logger "BTN_1 tmp1628 released"
+    echo "short button" > /dev/console
+    ps |grep 'jd_tmp1628_button.sh'|grep -v grep|awk '{print $1}'|xargs kill -9 2>/dev/null
+    screen_tool 8 short
+fi
+
+return 0
+

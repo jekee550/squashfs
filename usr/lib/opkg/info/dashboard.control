@@ -1,0 +1,10 @@
+Package: dashboard
+Version: 1
+Depends: libc, libssp
+Source: qca/feeds/qca-platform-utils/dashboard
+Section: QCA
+Architecture: ipq
+Installed-Size: 4247
+Description:  This package contains a shell script which can be used
+ internally by QCA to print the system information
+ quickly without accessing system entries one by one

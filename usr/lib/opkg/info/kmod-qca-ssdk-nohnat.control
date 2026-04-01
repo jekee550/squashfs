@@ -1,0 +1,9 @@
+Package: kmod-qca-ssdk-nohnat
+Version: 4.4.60+local0.0.1-1
+Depends: kernel (=4.4.60-1-3ee98c57b1216d17ff25499ba71cfacb)
+Provides: qca-ssdk
+Source: qca/feeds/ssdk/qca-ssdk
+Section: kernel
+Architecture: ipq
+Installed-Size: 264582
+Description:  Kernel driver for QCA SSDK

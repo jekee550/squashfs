@@ -1,0 +1,10 @@
+Package: kmod-udptunnel6
+Version: 4.4.60-1
+Depends: kernel (=4.4.60-1-3ee98c57b1216d17ff25499ba71cfacb)
+Source: package/kernel/linux
+License: GPLv2
+Section: kernel
+Status: unknown hold not-installed
+Architecture: ipq
+Installed-Size: 1852
+Description:  IPv6 UDP tunneling support

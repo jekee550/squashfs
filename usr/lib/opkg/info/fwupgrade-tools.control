@@ -1,0 +1,8 @@
+Package: fwupgrade-tools
+Version: local0.0.1-1
+Depends: libc, libssp, losetup
+Source: qca/feeds/bootloader/uboot-qca
+Section: boot
+Architecture: ipq
+Installed-Size: 120714
+Description:  U-boot images tools (dumpimage, mkimage)

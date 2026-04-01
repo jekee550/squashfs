@@ -1,0 +1,69 @@
+#!/bin/sh
+
+product=`. /lib/ipq806x.sh && ipq806x_product_name`
+
+led_action()
+{
+        logger "led_action led on/off"
+        if [ "`uci -q get system.led_switch.enable`" == "1" ];then
+            /etc/init.d/led stop && uci set system.led_switch.enable=0 && uci commit system
+        elif [ "`uci -q get system.led_switch.enable`" == "0" ] ;then
+            uci set system.led_switch.enable=1 && uci commit system && /etc/init.d/led start
+        fi
+        uci set jdc_ezmesh.ezmesh.user_turns_on_led=$(uci -q get system.led_switch.enable)
+        uci commit jdc_ezmesh
+        
+}
+
+logger "BTN_0 button  ${ACTION}  $SEEN"
+echo "BTN_0 button ${ACTION}  $SEEN" > /dev/console
+if [ "${ACTION}" = "pressed" ]
+then
+
+    if [ ! -f "/tmp/.bootdone" ];then
+        echo "BTN_0 button: system not init done " > /dev/console
+        logger "BTN_0 button: system not init done"
+        return 0
+    else
+             #tag1
+             (sleep 3 && /etc/init.d/led stop && \
+             uci set system.led_switch.enable='0' && uci commit system && \
+             echo timer > /sys/class/leds/led_b1/trigger && \
+             echo 200 > /sys/class/leds/led_b1/delay_off && \
+             echo 200 > /sys/class/leds/led_b1/delay_on) &
+             led_wait_pid=$!
+             echo "$led_wait_pid" > /tmp/.jdc_ezmesh_wait_pid
+             echo "wait_pid=$led_wait_pid" > /dev/console
+    fi
+else
+    if [ ! -f "/tmp/.bootdone" ];then
+        echo "BTN_0 button: system not init done " > /dev/console
+        logger "BTN_0 button: system not init done"
+        return 0
+    fi
+    relay_ifname=$( uci -q get network.wan.device)
+    [ -z "$relay_ifname" ] &&  relay_ifname=$( uci -q get network.wan.ifname)
+    is_relay=$(echo $relay_ifname | grep -E "ath|apcli")
+    if [ "${ACTION}" = "released" -a "$SEEN" -le 2 ]  || [ -n "$is_relay" ] ;then
+            echo "BTN_0 button joylink button released" > /dev/console
+            echo "kill -9 $(cat /tmp/.jdc_ezmesh_wait_pid)" > /dev/console
+            kill -9 $(cat /tmp/.jdc_ezmesh_wait_pid)
+
+            #产测文件
+            echo "joylink button released" > /tmp/joylink_test
+            led_action
+    else
+            if [ "$(uci -q get jdc_ezmesh.ezmesh.enable)" = "0" ];then
+                uci set jdc_ezmesh.ezmesh.enable='1'
+                if [ "$(uci -q get system.@system[0].intialized)" = "1" ] ;then
+                    uci set jdc_ezmesh.ezmesh.role='controller'
+                fi
+                uci commit jdc_ezmesh
+                /etc/init.d/jdc_ezmesh start &
+            else
+                /etc/init.d/jdc_ezmesh restart & # for led action
+            fi
+     fi
+fi
+return 0
+

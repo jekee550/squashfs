@@ -1,0 +1,8 @@
+Package: jdc_flow
+Version: 1
+Depends: libc, libssp, libopenssl, libcurl, libjson-c, libuci, libpthread, libericstools, libnl-tiny, libubus, libblobmsg-json, libubus_ht, libubox, libip4tc, libip6tc, libxtables, libjdc_uci, libjdc_utilities
+Source: feeds/jdcloud_packages/service/jdc_flow
+Section: opt
+Architecture: ipq
+Installed-Size: 18724
+Description:  jdcloud flow daemon

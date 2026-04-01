@@ -1,0 +1,10 @@
+#!/bin/sh
+[ -z "$1" ] && echo "odhcp6c.user Warning: need run by odhcp6c" && exit 1
+[ -n "$2" ] && {
+	case "$2" in
+		"stopped")
+		#clear all deprecated IPv6 address
+		ip -6 address flush scope global deprecated dynamic
+		;;
+	esac
+}

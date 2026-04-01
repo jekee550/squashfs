@@ -1,0 +1,13 @@
+Package: fuse-utils
+Version: 2.9.3-2
+Depends: libc, libssp, libfuse
+Source: package/utils/fuse
+License: LGPLv2.1 GPLv2
+LicenseFiles: COPYING.LIB COPYING
+Section: utils
+Architecture: ipq
+Installed-Size: 15549
+Description:  FUSE (Filesystem in UserSpacE)
+ This package contains the FUSE utilities.
+ - fusermount
+ - ulockmgr_server

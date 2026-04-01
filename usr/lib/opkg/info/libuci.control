@@ -1,0 +1,10 @@
+Package: libuci
+Version: 2021-04-14-4b3db117-5
+Depends: libc, libssp, libubox
+Source: package/system/uci
+License: LGPL-2.1
+Section: libs
+Maintainer: Felix Fietkau <nbd@nbd.name>
+Architecture: ipq
+Installed-Size: 15692
+Description:  C library for the Unified Configuration Interface (UCI)

@@ -1,0 +1,26 @@
+config alarm 'reboot_plan'
+	option cmd 'sh /sbin/jd_reboot_plan.sh'
+	option type 'customize'
+	option enable '0'
+	option start_time '02:59'
+	option week '2 4 7'
+	option cust_value '6'
+
+config alarm 'upgrade_plan'
+	option type 'customize'
+	option cmd 'sh /sbin/jd_online_upgrade.sh'
+	option week '1 2 3 4 5 6 7'
+	option enable '1'
+	option start_time '04:17'
+	
+config alarm 'wifi_plan'
+	option type 'customize'
+	option cmd 'sh /sbin/jd_wifi_plan.sh'
+	option enable '0'
+	option week '1 2 3 4 5'
+	option stop_time '23:59'
+	option start_time '07:59'
+	option repeat '6'
+
+
+	 

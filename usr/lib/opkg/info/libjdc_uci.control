@@ -1,0 +1,8 @@
+Package: libjdc_uci
+Version: 1.0.0
+Depends: libc, libssp, libjson-c, libuci
+Source: feeds/jdcloud_packages/libs/libjdc_uci
+Section: opt
+Architecture: ipq
+Installed-Size: 7758
+Description:  a common function for uci

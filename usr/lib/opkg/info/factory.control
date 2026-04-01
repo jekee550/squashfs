@@ -1,0 +1,10 @@
+Package: factory
+Version: 1.0-1
+Depends: libc, libssp
+Source: package/jdcloud/service/factory
+License: GPL-2.0
+Section: opt
+Maintainer: hugo <quanhai.zhang@arrowasia.com>
+Architecture: ipq
+Installed-Size: 7599
+Description:  factory test utility

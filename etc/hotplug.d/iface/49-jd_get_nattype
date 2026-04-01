@@ -1,0 +1,20 @@
+#!/bin/sh
+
+[ "$ACTION" = ifup -o "$ACTION" = ifupdate ] || exit 0
+
+if [ "$(uci -q get network.lan.proto)" = "dhcp" ]; then
+	if [ "$INTERFACE" = "lan" ]; then
+		[ -e /opt/etc/nattype.sh ] && {
+			logger -t nattype "nat type recheck due to $ACTION of $INTERFACE"
+			/opt/etc/nattype.sh &
+		}
+	fi
+else
+	if [ "$INTERFACE" = "wan" ]; then
+		[ -e /opt/etc/nattype.sh ] && {
+			logger -t nattype "nat type recheck due to $ACTION of $INTERFACE"
+			/opt/etc/nattype.sh &
+		}
+	fi
+fi
+

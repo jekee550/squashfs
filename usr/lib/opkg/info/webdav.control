@@ -1,0 +1,9 @@
+Package: webdav
+Version: 1.0.10-20240827
+Depends: libc, libssp
+Source: feeds/jdcloud_packages/service/webdav
+Section: opt
+Maintainer: jdcloud
+Architecture: ipq
+Installed-Size: 2065600
+Description:  webdav

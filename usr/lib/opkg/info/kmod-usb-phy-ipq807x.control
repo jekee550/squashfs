@@ -1,0 +1,8 @@
+Package: kmod-usb-phy-ipq807x
+Version: 4.4.60+1-1
+Depends: kernel (=4.4.60-1-3ee98c57b1216d17ff25499ba71cfacb), kmod-usb-core
+Source: qca/feeds/platform_utils/platform_drivers
+Section: kernel
+Architecture: ipq
+Installed-Size: 11594
+Description:  Support for USB PHY drivers in IPQ807x based SoCs.

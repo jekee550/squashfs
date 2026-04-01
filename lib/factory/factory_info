@@ -1,0 +1,9 @@
+#!/bin/sh
+
+if [ $# -eq 2 -a "$1" = "get" ];then
+	if [ "$2" = "sn" ];then
+		echo "$(factory_hm info | awk -F "sn=" '{print $2}' | tr -d '\n')"
+	elif [ "$2" = "mac" ];then
+		echo "$(factory_hm info | awk -F "eth1 mac=" '{print $2}' | sed 's/://g' | tr -d '\n')"
+	fi
+fi

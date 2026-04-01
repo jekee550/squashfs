@@ -1,0 +1,13 @@
+#!/bin/sh
+#
+# Copyright (c) 2022 Jdc add by wangkun271
+#
+# All Rights Reserved.
+# Qualcomm Atheros Confidential and Proprietary.
+#
+
+if [ "$ACTION" = "released" -a "$BUTTON" = "wps" ]; then
+    echo "$(date)  98-jdc_ezmesh_led  ACTION=$ACTION BUTTON=$BUTTON" > /dev/console
+fi
+
+exit 0

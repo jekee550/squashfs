@@ -1,0 +1,516 @@
+/*整体部分*/
+::-webkit-scrollbar {
+    width: 3px;
+}
+
+/*滑动轨道*/
+
+ ::-webkit-scrollbar-track {
+    border-radius: 0px;
+    background: none;
+}
+
+/*滑块*/
+
+ ::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, .2);
+    background-color: rgba(255, 255, 255, .75)
+}
+
+/*滑块效果*/
+
+ ::-webkit-scrollbar-thumb:hover {
+    border-radius: 10px;
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, .2);
+    background-color: rgba(85, 85, 85, 0.4);
+}
+
+/*公用部分*/
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+}
+
+#onlineGuideBox {
+    width: 100%;
+    height: 100%;
+}
+
+.onlieGuideBox_title {
+    width: 100%;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+    color: #333;
+}
+
+.onlieGuideBox_content {
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: PingFang SC;
+    font-style: normal;
+    font-weight: normal;
+}
+
+.onlieGuideBox_content_top {
+    font-weight: 600;
+    color: #333333;
+    border-bottom: 1px solid #ddd;
+    text-align: center;
+}
+
+.onlieGuideBox_marginLeft_5 {
+    margin-left: 5px;
+}
+
+.onlieGuideBox_content_text {
+    text-align: left;
+    font-size: 14px;
+    color: #333333;
+}
+
+.onlieGuideBox_content_btn {
+    width: 100%;
+    border: none;
+    border-radius: 4px;
+    outline: none;
+    background: #4762FE;
+    color: #fff;
+}
+
+.onlieGuideBox_content_btn:hover {
+    background: #3c58f7
+}
+
+.onlieGuideBox_content_select {
+    color: #4762FE;
+    font-size: 12px;
+    cursor: pointer;
+    text-align: center;
+}
+
+.onlieGuideBox_content_select:hover {
+    color: #3c58f7;
+}
+
+.internet_type_select {
+    width: 100%;
+    border-bottom: 1px solid #ddd;
+}
+
+.internet_type_select_name {
+    text-align: left;
+    width: 35%;
+    margin-bottom: 0;
+}
+
+.tinternet_type_select_content p:nth-of-type(1) {
+    width: 80%;
+}
+
+.tinternet_type_select_content p:nth-of-type(2) {
+    width: 18%;
+    text-align: right;
+}
+
+.tinternet_type_select_content {
+    display: inline-block;
+    width: 63%;
+    cursor: pointer;
+}
+
+.tinternet_type_select_content p {
+    display: inline-block;
+    text-align: left;
+    margin: 0;
+    color: #999;
+    font-size: 12px;
+}
+
+.onlieGuideBox_content_pTop {
+    text-align: left;
+    font-size: 12px;
+    color: #666;
+}
+
+.onlieGuideBox_content_inputBig {
+    width: 100%;
+    background: #F4F6FA;
+    border: 1px solid #DDDDDD;
+    box-sizing: border-box;
+    border-radius: 3px;
+    color: #333;
+    outline: none;
+}
+
+.guide_content_ipt_margin20 {
+    margin-bottom: 20px;
+}
+
+.guideChoose_tip {
+    text-align: left;
+    margin-top: 12px;
+}
+
+.guideChoose_tip>img {
+    cursor: pointer;
+}
+
+.guideChoose_tip>span {
+    font-size: 12px;
+    color: #666;
+}
+
+.onlieGuideBox_title_marginTop60 {
+    padding-top: 60px;
+}
+
+.onlieGuideBox_title_marginTop85 {
+    margin-top: -85px;
+}
+
+.onlieGuideBox_bigTitle {
+    font-size: 32px;
+    letter-spacing: 0.05em;
+    color: rgb(51, 51, 51);
+    display: inline-block;
+    text-align: left;
+    line-height: 71px;
+    padding-left: 20px;
+}
+
+.onlieGuideBox_Title_p {
+    color: #999;
+}
+
+input::-webkit-input-placeholder {
+    color: #999;
+}
+
+.last_li_borderNone {
+    border: none!important;
+}
+
+.guide_config_content_div {
+    width: 50%;
+    float: left;
+}
+
+.guide_config_QRcode {
+    border: 1px solid #F4F6FA;
+    box-sizing: border-box;
+}
+
+.guide_config_QRcode_text {
+    text-align: center;
+    font-weight: 600;
+    color: #333;
+}
+
+.guide_config_info {
+    text-align: left;
+    margin-bottom: 15px;
+}
+
+.guide_config_info_label {
+    color: #999;
+    letter-spacing: 0.01em;
+}
+
+.guide_config_info_input {
+    background: #F4F6FA;
+    border: none;
+    box-sizing: border-box;
+    border-radius: 3px;
+    color: #333;
+    outline: none;
+    white-space: pre;
+	overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.guide_config_QRcode_img {
+    border: 5px solid #F4F6FA;
+}
+
+.triangle_up {
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-bottom: 10px solid #fff;
+    position: absolute;
+    top: -8px;
+    right: 7px;
+}
+
+.M_returnImg {
+    float: left;
+    cursor: pointer;
+    margin-top: 18px;
+    display: none;
+}
+
+/*wifi中继向导页面*/
+
+.guide_wifi_relay_div {
+    position: relative;
+    width: 100%;
+    background: #F4F6FA;
+    border: 1px solid #DDDDDD;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    border-radius: 3px;
+    color: #333;
+}
+
+.guide_wifi_relay_div_name {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 93%;
+    text-align: left;
+    height: 100%;
+}
+
+.guide_wifi_relay_div_img {
+    width: 7%;
+    position: absolute;
+    top: 0;
+    left: 93%;
+    cursor: pointer;
+    height: 100%;
+}
+
+.guide_wifi_relay_div_img_Rotate {
+    -webkit-transform: rotate(180deg);
+    -moz-transform: rotate(180deg);
+    -o-transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+    transform: rotate(180deg);
+}
+
+.guide_wifi_relay_div_ul {
+    width: 100%;
+    position: absolute;
+    background: #FFFFFF;
+    box-sizing: border-box;
+    box-shadow: 0px 0px 10px rgba(71, 98, 254, 0.1);
+    border-radius: 3px;
+    border: 1px solid #EEEEEE;
+    display: none;
+    z-index: 999;
+}
+
+.ul_none_data {
+    line-height: 54px;
+    text-align: center;
+    font-size: 14px;
+    color: #999;
+}
+
+.guide_wifi_relay_div_ul>ul {
+    list-style: none;
+    text-align: left;
+    margin: 0;
+}
+
+.guide_wifi_relay_div_ul>ul>li {
+    border-bottom: 1px solid #ddd;
+    cursor: pointer;
+    position: relative;
+}
+
+.guide_wifi_relay_div_ul>ul>li:hover {
+    color: #4762FE;
+}
+
+.guide_wifi_relay_div_ul>ul>li>img {
+    position: absolute;
+    right: 0;
+}
+
+/*修改bootstrap的模态框*/
+
+.modal-content {
+    border-radius: 20px;
+    padding: 10px 40px;
+}
+
+.close {
+    font-size: 28px;
+}
+
+.modal-title {
+    text-align: left;
+    font-weight: 600;
+    font-size: 16px;
+    color: #333333;
+}
+
+.modal-body {
+    max-height: 300px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+.modal-body p {
+    text-align: left;
+    line-height: 20px;
+    margin: 10px 0;
+}
+
+.modal-body .modal-body-p {
+    text-align: center;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 60px;
+    color: #000000;
+    margin: 0;
+}
+
+/*检测上网环境部分*/
+
+.onlieGuideBox_checkInter_title {
+    text-align: center;
+    position: relative;
+}
+
+.onlieGuideBox_checkInter_content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 100;
+    width: 253px;
+}
+
+.onlieGuideBox_checkInter_content img {
+    width: 100%;
+}
+
+.onlieGuideBox_checkInter_content p {
+    text-align: center;
+    font-family: PingFang SC;
+    font-style: normal;
+    font-weight: normal;
+    color: #333333;
+    margin: 0;
+}
+
+/*扫描附近wifi部分*/
+
+@-webkit-keyframes rotation {
+    from {
+        -webkit-transform: rotate(0deg);
+    }
+    to {
+        -webkit-transform: rotate(360deg);
+    }
+}
+
+.imgRotate {
+    -webkit-transform: rotate(360deg);
+    animation: rotation 1s linear infinite;
+    -moz-animation: rotation 1s linear infinite;
+    -webkit-animation: rotation 1s linear infinite;
+    -o-animation: rotation 1s linear infinite;
+}
+
+/*end*/
+
+.dns_select {
+    display: none;
+    width: 100%;
+    padding: 0 20px;
+    list-style: none;
+    text-align: left;
+    margin: 0;
+    max-height: 250px;
+    font-size: 14px;
+    border: 1px solid #EEEEEE;
+    border-radius: 3px;
+    box-shadow: 0px 0px 10px rgba(71, 98, 254, 0.1);
+    background: rgba(255, 255, 255, 1);
+    color: #888888;
+    overflow-y: auto;
+    user-select: none;
+}
+.dns_select::before{
+    width: 0;
+    height: 0;
+    content: "";
+    border-width: 10px;
+    border-color: transparent transparent #fff transparent;
+    border-style: dashed dashed solid dashed;
+    position: absolute;
+    z-index: 100;
+}
+.dns_select::after{
+    width: 0;
+    height: 0;
+    content: "";
+    border-width: 11px;
+    border-color: transparent transparent #CBCCCB transparent;
+    border-style: dashed dashed solid dashed;
+    position: absolute;
+    z-index: 99;
+}
+.dns_select .dns_select_item {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    background: #fff;
+    height: 65px;
+    line-height: 65px;
+    border-bottom: 1px solid #DDDDDD;
+    cursor: pointer;
+    position: relative;
+    color: #333;
+}
+.dns_select .dns_select_item:last-child {
+    border-bottom: none;
+}
+.dns_select .dns_select_item .dns_select_item_ip {
+    height: 20px;
+    font-size: 14px;
+    color: #333333;
+    line-height: 20px;
+}
+.dns_select .dns_select_item .dns_select_item_txt {
+    height: 17px;
+    font-size: 12px;
+    color: #999999;
+    line-height: 17px;
+}
+.dns_close {
+    display: none;
+    position: absolute;
+    right: 13px;
+    z-index: 999;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 25px;
+}
+.dns_close img {
+    width: 100%;
+}
+
+#dns_one,
+#dns_two {
+    border-color: #dddddd;
+    -webkit-box-shadow: none;
+    box-shadow: none
+}
+
+#dns_one:focus,
+#dns_two:focus {
+    border-color: #dddddd;
+    outline: 0;
+    -webkit-box-shadow: none;
+    box-shadow: none
+}

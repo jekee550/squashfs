@@ -1,0 +1,101 @@
+@media screen and (min-width: 1080px) {
+    .guideWelcomeTop_title_p {
+        font-size: 36px!important;
+    }
+}
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+    min-width: 310px;
+}
+
+#guide_welcome_box {
+    width: 100%;
+    height: 100%;
+    font-family: PingFang SC;
+    font-style: normal;
+    font-weight: normal;
+}
+
+i {
+    font-style: normal;
+    color: #4762FE;
+}
+
+p {
+    margin: 0;
+}
+
+.guideWelcomeTop {
+    /* height: 50%;
+    background: #fff;
+    position: relative; */
+
+    background: url(../../../P_IMG/background.png) no-repeat;
+    background-size: 100% 88%;
+}
+
+/* .guideWelcomeTop_Img {
+    height: 90%;
+    background: url(../../P_IMG/background.png) no-repeat;
+    background-size: 100% 100%;
+} */
+
+.guideWelcomeTop_title {
+    /* width: 100%;
+    position: absolute;
+    top: 40px; */
+
+    text-align: center;
+    padding-top: 6%;
+}
+
+.guideWelcomeTop_title_p {
+    line-height: 50px;
+    letter-spacing: 0.05em;
+    font-weight: 500;
+    color: #FFFFFF;
+    text-align: center;
+    font-size: 28px;
+}
+
+.guideWelcomeTop_img {
+    /* position: absolute;
+    bottom: 0;
+    width: 100%;
+    text-align: center; */
+
+    text-align: center;
+    padding-top: 50px;
+}
+
+.guideWelcomeTop_img img{
+    width: 300px;
+    height: 300px;
+}
+.guideWelcomeFoot {
+    /* text-align: center;
+    height: 50%;
+    padding-top: 130px; */
+    text-align: center;
+    padding: 32px 0 50px 0;
+    box-sizing: border-box;
+}
+
+#guide_welcome_btn {
+    width: 320px;
+    background: linear-gradient(180deg, #5E75FF 0%, #4460FF 100%);
+    border-radius: 100px;
+    border: none;
+    font-size: 14px;
+    line-height: 46px;
+    color: #FFFFFF;
+    outline: none;
+}
+
+.guideChoose_tip {
+    text-align: center!important;
+    cursor: pointer;
+}

@@ -1,0 +1,10 @@
+Package: kmod-qca-wifi-unified-profile
+Version: 4.4.60+local0.0.1-1
+Depends: kernel (=4.4.60-1-3ee98c57b1216d17ff25499ba71cfacb), libgcc, libc, wireless-tools, librt, kmod-cfg80211-linux, libroxml, libnl, qca-cfg80211, kmod-msm-mproc, qca-qrtr, kmod-qca-nss-drv
+Provides: kmod-qca-wifi
+Source: qca/feeds/qca/net/qca-wifi
+Section: QCA
+Maintainer: Qualcomm Atheros
+Architecture: ipq
+Installed-Size: 3582591
+Description:  QCA Wireless LAN Driver

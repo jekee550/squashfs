@@ -1,0 +1,4 @@
+/lib/modules/4.4.60/dbm.ko
+/etc/modules.d/53-usb-dwc3-qcom
+/etc/modules-boot.d/53-usb-dwc3-qcom
+/lib/modules/4.4.60/dwc3-qcom.ko

@@ -1,0 +1,111 @@
+#!/bin/sh /etc/rc.common
+
+START=99
+USE_PROCD=1
+
+NAME='downloader'
+PREFIX=/opt/downloader
+PROG=/sbin/downloader
+PROG_WRAPPER=/sbin/rpcwrapper
+
+clear_session() {
+	for line in `cat $PREFIX/downloader.storage`
+	do
+		part=`echo $line | awk -F "\"" '{print $2}'`
+		mode=`echo $line | awk -F "\"" '{print $4}'`
+		[ -n "$part" -a -n "$mode" ] && {
+			echo "part=$part, mode=$mode"
+			[ "$mode" = "pcdn" ] && /usr/sbin/jdc_downloader clear $part
+		}
+	done
+
+	return 0
+}
+
+start_service() {
+	prepare_env || {
+		logger "start $NAME failed, please make sure part format correctly."
+		return
+	}
+
+    	touch $PREFIX/downloader.session 2>/dev/null
+
+	procd_open_instance
+	procd_set_param command $PROG
+	procd_append_param command --conf-path=/etc/downloader.conf
+	procd_set_param respawn 50 20 -1
+	procd_close_instance
+
+	#procd_set_param env SOME_VARIABLE=funtimes  # pass environment variables to your process
+	#procd_set_param limits core="unlimited"  # If you need to set ulimit for your process
+	#procd_set_param file /var/etc/your_service.conf # /etc/init.d/your_service reload will restart the daemon if these files have changed
+	#procd_set_param netdev dev # likewise, except if dev's ifindex changes.
+	#procd_set_param data name=value ... # likewise, except if this data changes.
+	#procd_set_param stdout 1 # forward stdout of the command to logd
+	#procd_set_param stderr 1 # same for stderr
+	#procd_set_param root root # run service as user group
+	#procd_set_param pidfile /var/run/joylink.pid # write a pid file on instance start and remote it on stop
+
+	procd_open_instance
+	procd_set_param command $PROG_WRAPPER
+	procd_set_param respawn 50 20 -1
+	procd_close_instance
+
+	procd_open_instance
+	procd_set_param command /etc/downloader.sh
+	procd_set_param respawn 50 20 -1
+	procd_close_instance
+}
+
+creat_JDBOXDownload() {
+	if [ ! -d "/mnt/$1/JDBOXDownload" ]; then
+		mkdir -p /mnt/$1/JDBOXDownload
+	fi
+	# 将所属用户改为 nobody, 所属组改为 nogroup, 
+	# 以便webdav在其中创建文件, webdav的运行权限是nobody:nogroup。
+	chown -h nobody:nogroup /mnt/$1/JDBOXDownload
+}
+
+path_get() {
+	config_get part $1 part
+	config_get mode $1 mode
+	if [ -n "$(echo $part | grep mmcblk)" -a "$mode" = "samba" -a -n "$(cat /proc/mounts | grep -w $part)" ];then
+		int_samba_part=$part
+		creat_JDBOXDownload $part
+	elif [ -n "$(echo $part | grep sd)" -a "$mode" = "samba" -a -n "$(cat /proc/mounts | grep -w $part)" ];then
+		ext_samba_part=$part
+		creat_JDBOXDownload $part
+	fi
+	[ -n "$part" -a -n "$mode" -a -n "$(cat /proc/mounts | grep -w $part)" ] && echo "\"$part\":\"$mode\"," >> $PREFIX/downloader.storage
+}
+
+prepare_env() {
+	int_samba_part=
+	ext_samba_part=
+	#将盘符及模式写到文件，供downloader启动时判断
+	echo "{" > $PREFIX/downloader.storage
+	config_load samba
+	config_foreach path_get sambashare
+	#去掉最后一个字符
+	sed -i '$ s/.$//' $PREFIX/downloader.storage
+	[ -n "$(cat $PREFIX/downloader.storage | grep "{")" ] && echo "}" >> $PREFIX/downloader.storage
+
+	clear_session
+	# 创建符号链接，路径指向不存在，防止aria2占用opt空间
+	rm -rf /opt/downloader/null
+	ln -s /mnt/null /opt/downloader/null
+
+	[ -z "$int_samba_part" -a -z "$ext_samba_part" ] && return 1
+	return 0
+}
+
+stop_service() {
+        service_stop $PROG
+        service_stop $PROG_WRAPPER
+	rm -f $PREFIX/downloader.storage
+}
+reload() {
+        service_reload $PROG
+        service_reload $PROG_WRAPPER
+}
+

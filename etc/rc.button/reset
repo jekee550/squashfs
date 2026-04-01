@@ -1,0 +1,65 @@
+#!/bin/sh
+
+#[ "${ACTION}" = "released" ] || exit 0
+
+echo "reset button released" > /tmp/reset_test
+
+
+. /lib/functions.sh
+
+logger "$BUTTON $ACTION for $SEEN seconds"
+if [ "$ACTION" = "pressed" ]
+then
+	echo "$BUTTON $ACTION for $SEEN seconds, start led.sh" > /dev/console
+	jd_reset_led.sh &
+	exit 0
+fi
+if [ "$ACTION" = "released" -a "$SEEN" -lt 5 ]
+then
+
+	echo "$BUTTON $ACTION for $SEEN seconds, kill jd_reset_led.sh" > /dev/console
+	pid=`ps |grep "jd_reset_led.sh"|grep -v "grep"| awk '{print $1}'`
+	kill -9 $pid
+	exit 0
+fi
+
+#if [ "$SEEN" -lt 1 ]
+#then
+#	echo "REBOOT" > /dev/console
+#	sync
+#	reboot
+#elif [ "$SEEN" -gt 5 ]
+if [ "$ACTION" = "released" -a "$SEEN" -ge 5 ]
+then
+	echo "FACTORY RESET" > /dev/console
+	screen_tool 12 reset
+	sleep 6
+	#remove plugin
+	for plugin in `ls /opt/etc/init.d/`
+	do
+		[ "$plugin" = "jdcvhd_config" ] && continue
+		/opt/etc/init.d/$plugin stop
+		/rom/bin/opkg --force-remove remove $plugin
+	done
+	#check telnet switch
+	telnets="$(factory_hm info | grep telnet | awk -F "telnet=" '{print $2}')"
+	[ "$telnets" = "1" ] && factory_hm info telnet 0
+	rm -f /opt/wan_net_flow
+	#delete logfile
+	rm -rf /log/*
+	[ "$SEEN" -gt 30 ] && {
+		storage_p=$(find_mmc_part "storage" 2> /dev/null)
+		[ -n "$storage_p" ] && {
+			DEVNAME="$(echo $storage_p | awk -F "/" '{print $3}')"
+			#delete plugin cache
+			rm -rf /mnt/$DEVNAME/aiecplugin*
+			/rom/bin/opkg --force-remove remove jdcvhd_config
+			#delete /opt除joylink以外的文件
+			find /opt/* ! -name joylink* | grep -v /etc | xargs rm -rf
+		}
+	}
+	firstboot -ry &
+	sleep 10 && echo c > /proc/sysrq-trigger
+fi
+
+return 0

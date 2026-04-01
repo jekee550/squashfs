@@ -1,0 +1,9 @@
+Package: qca-nss-fw-cp-retail
+Version: 10-1
+Depends: libc, libssp
+Provides: qca-nss-fw-cp
+Source: qca/feeds/nss/qca-nss-fw-cp-retail
+Section: kernel
+Architecture: ipq
+Installed-Size: 352964
+Description:  This package contains the NSS firmwares (retail) for QTI chipset

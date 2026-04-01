@@ -1,0 +1,9 @@
+#!/bin/sh
+
+[ "$ACTION" = "ifup" ] && {
+	if [ ${INTERFACE} = 'lan' ]; then
+		logger -t samba "Restart samba due to $ACTION of $INTERFACE ($DEVICE)"
+		/etc/init.d/samba restart
+	fi
+}
+

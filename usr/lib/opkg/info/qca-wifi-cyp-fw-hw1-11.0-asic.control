@@ -1,0 +1,9 @@
+Package: qca-wifi-cyp-fw-hw1-11.0-asic
+Version: WLAN.HK.2.5.r4-00745-QCAHKSWPL_SILICONZ-1-1
+Depends: libc, libssp
+Source: qca/feeds/qca-cp/net/qca-cyp
+Section: QCA
+Maintainer: Qualcomm Atheros
+Architecture: all
+Installed-Size: 105
+Description:  This package contains the qca-wifi firmware(-hw1-11.0-asic) used in 11.x drivers

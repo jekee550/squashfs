@@ -1,0 +1,8 @@
+Package: kmod-shortcut-fe
+Version: 4.4.60+local0.0.1-1
+Depends: kernel (=4.4.60-1-3ee98c57b1216d17ff25499ba71cfacb)
+Source: qca/feeds/shortcut-fe/shortcut-fe
+Section: kernel
+Architecture: ipq
+Installed-Size: 28777
+Description:  Kernel driver for SFE

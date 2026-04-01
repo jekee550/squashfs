@@ -1,0 +1,77 @@
+#!/bin/bash /etc/rc.common
+# Copyright (C) 2006-2011 OpenWrt.org
+
+START=50
+
+USE_PROCD=1
+PROG=/usr/sbin/crond
+
+validate_cron_section() {
+	uci_validate_section system system "${1}" \
+		'cronloglevel:uinteger'
+}
+
+function rand(){
+    min=$1
+    max=$(($2-$min+1))
+    num=$(($RANDOM+1000000000))
+    echo $(($num%$max+$min))
+}
+
+start_service() {
+	[ -z "$(ls /etc/crontabs/)" ] && return 1
+
+	loglevel="$(uci_get "system.@system[0].cronloglevel")"
+
+	[ -z "${loglevel}" ] || {
+		/sbin/validate_data uinteger "${loglevel}" 2>/dev/null
+		[ "$?" -eq 0 ] || {
+			echo "validation failed"
+			return 1
+		}
+	}
+
+	#mkdir -p /var/spool/cron
+	#ln -s /etc/crontabs /var/spool/cron/ 2>/dev/null
+	rm -fr /var/spool/cron 2>/dev/null
+
+	procd_open_instance
+	procd_set_param command "$PROG" -f -c /etc/crontabs -l "${loglevel:-5}"
+	for crontab in /etc/crontabs/*; do
+		 procd_set_param file "$crontab"
+	done
+	procd_close_instance
+	
+	enable="$(uci_get "jd_clock.upgrade_plan.enable")"
+	time="$(uci_get "jd_clock.upgrade_plan.start_time")"
+	fu="$(uci_get "jd_product.upgrade.fu")"
+	if [ -z "$fu" ]; then
+		fu=0
+	fi
+
+	if [ $enable = "1" -o $fu = "1" ]; then
+		if [ $time = "04:17" ]; then
+			rnd=$(rand 1 59)
+			crontab -l | grep -v 'jd_online_upgrade.sh' | crontab -
+			if [ $enable = "1" ]; then
+				(crontab -l ; echo "$rnd 04 * * * /sbin/jd_online_upgrade.sh") | crontab -
+			else 
+				(crontab -l ; echo "$rnd 04 * * * /sbin/jd_online_upgrade.sh #fu") | crontab -
+			fi
+		elif [ -z "$(crontab -l | grep jd_online_upgrade.sh)" ];then
+			tm_min="$(echo ${time#*:})"
+			tm_hour="$(echo ${time%:*})"
+			[ -z "$tm_hour" ] && tm_hour='04'
+			[ -z "$tm_min" ] && tm_min=$(rand 1 59)
+			if [ $enable = "1" ]; then
+				(crontab -l ; echo "$tm_min $tm_hour * * * /sbin/jd_online_upgrade.sh") | crontab -
+			else
+				(crontab -l ; echo "$tm_min $tm_hour * * * /sbin/jd_online_upgrade.sh #fu") | crontab -
+			fi
+		fi
+	fi
+}
+
+service_triggers() {
+	procd_add_validation validate_cron_section
+}

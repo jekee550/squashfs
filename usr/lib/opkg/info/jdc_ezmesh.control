@@ -1,0 +1,10 @@
+Package: jdc_ezmesh
+Version: 1.0-1
+Depends: libc, libssp, libpthread, librt, libjdc_uci, libnl-tiny, libpcap, libjdc_ezmesh, libopenssl
+Source: feeds/jdcloud_packages/service/jdc_ezmesh
+License: GPL-2.0
+Section: opt
+Maintainer: wangkun <wangkun271@jd.com>
+Architecture: ipq
+Installed-Size: 56008
+Description:  jdc qcom ezmesh launch program

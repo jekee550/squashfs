@@ -1,0 +1,12 @@
+Package: ucert-full
+Version: 2019-11-29-e4bd927c-1
+Depends: libc, libssp, usign, libubox, libjson-c, libblobmsg-json
+Provides: ucert
+Source: package/system/ucert
+License: GPL-3.0+
+LicenseFiles: COPYING
+Section: base
+Maintainer: Daniel Golle <daniel@makrotopia.org>
+Architecture: ipq
+Installed-Size: 8124
+Description:  OpenWrt certificate generation and verification utility

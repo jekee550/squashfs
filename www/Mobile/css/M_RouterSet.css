@@ -1,0 +1,11 @@
+.head{height: 60px;width: 100%;box-shadow: 0px 4px 4px rgba(71, 98, 254, 0.1);background-color: #fff;}
+.head_img{position: absolute;margin: 10px;padding: 10px;}
+.head_p{line-height: 60px;text-align: center;font-family: PingFang SC;font-style: normal;font-weight: 500;font-size: 18px;}
+
+.content_box{margin-top: 20px;padding-left: 15px;background: #FFFFFF;border-radius: 12px;padding-bottom: 20px}
+.content_head{line-height: 50px;font-family: PingFang SC;font-style: normal;font-weight: 500;font-size: 16px;color: #333333;border-bottom: 1px solid #EEEEEE}
+
+.content_span_box{margin-top: 15px;}
+.span_left{display: inline-block;float: left;width: 38%;font-family: PingFang SC;font-style: normal;font-weight: normal;font-size: 14px;color: #666666;}
+.span_right{display: inline-block;width: 60%;font-family: PingFang SC;font-style: normal;font-weight: normal;font-size: 14px;color: #333333;}
+

@@ -1,0 +1,45 @@
+#!/bin/sh /etc/rc.common
+START=99
+STOP=10
+boot() {
+if [ $(md5sum  /etc/config/ddns | cut -d ' ' -f 1) = "f9ed237054e2935217fe16c6a3122e3b" ];then
+uci delete ddns.myddns_ipv4
+uci delete ddns.myddns_ipv6
+uci commit ddns
+fi
+return 0
+}
+stop_instance_by_section_id(){
+ps -w|grep dynamic_dns_updater.sh|grep $1|grep -v grep |awk '{print $1}'|xargs kill -9
+rm -rf /var/run/ddns/$1.*
+}
+reload() {
+/usr/lib/ddns/dynamic_dns_updater.sh -- reload
+return 0
+}
+restart() {
+if [ $# -eq 1 ]; then
+stop_instance_by_section_id $1
+sleep 1
+/usr/lib/ddns/dynamic_dns_updater.sh  -v 0 -S $1 -- start &
+else
+/usr/lib/ddns/dynamic_dns_updater.sh -- stop
+sleep 1
+/usr/lib/ddns/dynamic_dns_updater.sh -- start
+fi
+}
+start() {
+if [ $# -eq 1 ]; then
+/usr/lib/ddns/dynamic_dns_updater.sh  -v 0 -S $1 -- start &
+else
+/usr/lib/ddns/dynamic_dns_updater.sh -- start
+fi
+}
+stop() {
+if [ $# -eq 1 ]; then
+stop_instance_by_section_id $1
+else
+/usr/lib/ddns/dynamic_dns_updater.sh -- stop
+fi
+return 0
+}
